@@ -5,8 +5,8 @@
     <description></description>
     <link>http://tesigner.github.io/</link>
     <atom:link href="http://tesigner.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 07 Aug 2017 22:54:48 +0900</pubDate>
-    <lastBuildDate>Mon, 07 Aug 2017 22:54:48 +0900</lastBuildDate>
+    <pubDate>Wed, 16 Aug 2017 21:54:03 +0900</pubDate>
+    <lastBuildDate>Wed, 16 Aug 2017 21:54:03 +0900</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -15,25 +15,18 @@
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler
 $sudo apt-get install --no-install-recommends libboost-all-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;여기까지 하면, caffe compile시에 /usr/bin/ld: cannot find -lpthreads 가 발생 함.&lt;/p&gt;
-
-&lt;p&gt;2.additional dependencies&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$sudo apt-get install libhdf5-serial-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler libatlas-base-dev
+$sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev libatlas-base-dev
 $sudo apt-get install cmake
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;3.caffe 소스 받기&lt;/p&gt;
+&lt;p&gt;2.caffe 소스 받기&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$git clone https://github.com/BVLC/caffe.git
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;4.compile&lt;/p&gt;
+&lt;p&gt;3.compile&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$mkdir build
 $cd build
@@ -41,8 +34,15 @@ $cmake ..
 $make all -j8
 $make install
 $make runtest
+$make pycaffe
+$make distribute
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;env
+export PYTHONPATH=$PYTHONPATH:/path/to/caffe-master/python&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;5.commit docker image&lt;/p&gt;
 

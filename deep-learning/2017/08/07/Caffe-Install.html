@@ -66,25 +66,18 @@
 
 <div class="highlighter-rouge"><pre class="highlight"><code>$sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler
 $sudo apt-get install --no-install-recommends libboost-all-dev
-</code></pre>
-</div>
-
-<p>여기까지 하면, caffe compile시에 /usr/bin/ld: cannot find -lpthreads 가 발생 함.</p>
-
-<p>2.additional dependencies</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>$sudo apt-get install libhdf5-serial-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler libatlas-base-dev
+$sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev libatlas-base-dev
 $sudo apt-get install cmake
 </code></pre>
 </div>
 
-<p>3.caffe 소스 받기</p>
+<p>2.caffe 소스 받기</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>$git clone https://github.com/BVLC/caffe.git
 </code></pre>
 </div>
 
-<p>4.compile</p>
+<p>3.compile</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>$mkdir build
 $cd build
@@ -92,8 +85,15 @@ $cmake ..
 $make all -j8
 $make install
 $make runtest
+$make pycaffe
+$make distribute
 </code></pre>
 </div>
+
+<ol>
+  <li>env
+export PYTHONPATH=$PYTHONPATH:/path/to/caffe-master/python</li>
+</ol>
 
 <p>5.commit docker image</p>
 
