@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>tesigners</title>
-  <meta name="description" content="">
+  <title>Docker 사용에 대한 단상</title>
+  <meta name="description" content="서비/서비스 구성이 아닌, 개발환경으로 Docker를 사용해보려고 시도를 해봤다.결론을 먼저 말하면, 그다지 매력적이지는 않다는 것이다. 물론 내 개인의 생각이다.매력적이지 않다는 것은, 만들어진 이미지를 실행만 시키면, 어느 머신에서든 똑같은 환경으로 사용하기가 힘들다는 것이다....">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/">
+  <link rel="canonical" href="http://tesigner.github.io/essay/2017/08/16/EssayOnDockerUsage.html">
   <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
 </head>
 
@@ -54,33 +54,42 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Docker 사용에 대한 단상</h1>
+    <p class="post-meta"><time datetime="2017-08-16T00:00:00+09:00" itemprop="datePublished">Aug 16, 2017</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Aug 16, 2017</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>서비/서비스 구성이 아닌, 개발환경으로 Docker를 사용해보려고 시도를 해봤다.
+결론을 먼저 말하면, 그다지 매력적이지는 않다는 것이다. 물론 내 개인의 생각이다.
+매력적이지 않다는 것은, 만들어진 이미지를 실행만 시키면, 어느 머신에서든 똑같은 환경으로 사용하기가 힘들다는 것이다. 물론, 개발환경으로써의 사용하는 경우를 말한다.</p>
 
-        <h2>
-          <a class="post-link" href="/essay/2017/08/16/EssayOnDockerUsage.html">Docker 사용에 대한 단상</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 7, 2017</span>
+<p>처음 접한 것은 Tensorflow를 docker용 image 로 다운받았을 때였다. 그래서 자연스럽게 개발환경으로써 Docker를 받아들였다. 그러다가, 개발환경을 백업 및 일관성을 위한 팀내 공유를 위해 사용해보면 좋겠다라는 생각을 하고
+실효성 테스트를 해봤다.</p>
 
-        <h2>
-          <a class="post-link" href="/deep-learning/2017/08/07/Caffe-Install.html">Docker ubuntu 16.04에서 Caffe 설치</a>
-        </h2>
-      </li>
-    
-  </ul>
+<p>문제가 되는 부분은 딱 하나였다. Volume을 사용하는 경우의  계정 콘트롤.</p>
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+<p>Docker를 사용하다보면, Volume interface를 통해서 Host의 storage를 사용하게 된다.
+그 경우는 대부분 data base와 패키지 혹은 소스파일들이다. 개발환경일 경우에는, 개발자의 소스파일들이 된다.</p>
 
-</div>
+<p>문제는, Host와 Docker image의 계정정보(UID) 가 일치하지 않는다는데 있다.
+게다가, Docker context에서 만드는 파일들은, Docker context의 계정 권한으로 만들어진다. Host에서 이 파일들은 Docker context user의 UID에 상응하는 Host상의 user 권한으로 인식된다.</p>
+
+<p>따라서, 올바르게 Docker를 사용하려면, 둘 사이의 계정 정보를 일치시키는 작업이 필요하다.</p>
+
+<p>서비스를 구성하는 경우에는, Docker image를 만들때, Host의 계정 상황에 맞춰서, 필요한 계정을 만들고, 해당 계정으로 서비스들을 설치하면 된다.
+하지만, 개발환경의 경우 필요한 패키지를 수시로 설치, 업데이트 해야하고, 그때마다 이미지를 새로 만들고, 계정정보 매칭하고 해야하는 배포작업을 해야한다. 한마디로, 또 다른 일이 생기는 것이다.</p>
+
+<p>개발환경으로 Docker를 사용하면 좋은 경우는, 남의 서버에 기생하면서 특정 개발환경을 사용하려고 할때, 혹은, 검증 안된 개발환경을 새로 도입할때 테스트용으로 사용하는 경우에사용하는 것이 좋겠다는 것이 나의 결론이다.</p>
+
+<p>이상으로 2일동안의 도커 실효성 테스트 후, 도커에 대한 단상이었다.</p>
+
+
+  </div>
+
+</article>
 
       </div>
     </div>
