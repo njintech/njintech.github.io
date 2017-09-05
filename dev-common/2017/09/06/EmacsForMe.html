@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>tesigners</title>
-  <meta name="description" content="">
+  <title>Emacs configuration</title>
+  <meta name="description" content="이 포스팅은 내가 사용하는 Emacs의 기능들의 설치 및 설정 방법에 대한 기록이다.현재 사용중인 Emacs의 버전은 24.5.1이며, mac/ubuntu에서 사용중이다.따라서, mac과 ubuntu에 특화된 내용이 혼재할 수 있다.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/">
+  <link rel="canonical" href="http://tesigner.github.io/dev-common/2017/09/06/EmacsForMe.html">
   <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
 </head>
 
@@ -54,41 +54,58 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Emacs configuration</h1>
+    <p class="post-meta"><time datetime="2017-09-06T00:00:00+09:00" itemprop="datePublished">Sep 6, 2017</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Sep 6, 2017</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>이 포스팅은 내가 사용하는 Emacs의 기능들의 설치 및 설정 방법에 대한 기록이다.<br />
+현재 사용중인 Emacs의 버전은 24.5.1이며, mac/ubuntu에서 사용중이다.<br />
+따라서, mac과 ubuntu에 특화된 내용이 혼재할 수 있다.</p>
 
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/06/EmacsForMe.html">Emacs configuration</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 16, 2017</span>
+<h1 id="proxy">proxy</h1>
 
-        <h2>
-          <a class="post-link" href="/essay/2017/08/16/EssayOnDockerUsage.html">Docker 사용에 대한 단상</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 7, 2017</span>
+<p>방화벽 내부에서 MELPA를 사용하려면 proxy설정이 필요하다.<br />
+init.el에 다음의 proxy설정을 추가하면 된다.</p>
 
-        <h2>
-          <a class="post-link" href="/deep-learning/2017/08/07/Caffe-Install.html">Docker ubuntu 16.04에서 Caffe 설치</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
+<div class="highlighter-rouge"><pre class="highlight"><code>(setq url-proxy-services
+   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+     ("http" . "proxy.com:8080")
+     ("https" . "proxy.com:8080")))
+</code></pre>
 </div>
+
+<p>no_proxy는 regex matching으로 표현된다.</p>
+
+<h1 id="helm-install-and-configuration">helm install and configuration</h1>
+<p>vim에서는 ctags, cscope조합을 사용했는데, code browser로 helm을 사용한다.</p>
+
+<ul>
+  <li>
+    <p>mac</p>
+
+    <p>mac에서는 init.el의 command로 MELPA를 이용해 설치한다.</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>(require 'setup-helm)
+(require 'setup-helm-gtags))
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>ubuntu</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>apt-get install elpa-helm
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+  </div>
+
+</article>
 
       </div>
     </div>
