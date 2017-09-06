@@ -5,9 +5,161 @@
     <description></description>
     <link>http://tesigner.github.io/</link>
     <atom:link href="http://tesigner.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 06 Sep 2017 06:38:23 +0900</pubDate>
-    <lastBuildDate>Wed, 06 Sep 2017 06:38:23 +0900</lastBuildDate>
+    <pubDate>Wed, 06 Sep 2017 21:26:15 +0900</pubDate>
+    <lastBuildDate>Wed, 06 Sep 2017 21:26:15 +0900</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Tips for Docker Install and Usage</title>
+        <description>&lt;h1 id=&quot;install&quot;&gt;Install&lt;/h1&gt;
+&lt;p&gt;reference: &lt;a href=&quot;https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04&quot;&gt;https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;add the GPG key for the official Docker repository to the system:&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;add docker repository&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;update the package database&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$sudo apt-get update&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;make sure to install from the Docker repo instead of the default Ubuntu 16.04 repo&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ apt-cache policy docker-ce&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;install docker&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ sudo apt-get install -y docker-ce&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;executing-without-sudo&quot;&gt;Executing without sudo&lt;/h1&gt;
+&lt;p&gt;by default, running the docker command requires root privileges
+instead create &lt;strong&gt;docker&lt;/strong&gt; group&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;add user to &lt;strong&gt;docker&lt;/strong&gt; group&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ sudo usermod -aG docker ${USER}&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;relogin&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ su - ${USER}&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;confirm&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ id -nG&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;saveload-docker-image&quot;&gt;Save/Load docker image&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;add new image with offline&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ docker load --input &amp;lt;image file&amp;gt;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;save image to file&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ docker save --output &amp;lt;filename&amp;gt; &amp;lt;image name&amp;gt;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;creating-docker-image-with-user-not-root&quot;&gt;Creating docker image with user (not root)&lt;/h1&gt;
+&lt;p&gt;개발환경용으로 사용하기 위해서는 사용자 계정으로 docker container를 실행해야 한다.
+이때, host의 사용자 계정에 해당하는 계정이 image에 없으면,  root로 실행해서,  host  사용자와 동일한 UID를 가지는 사용자 계정을 만든 후에 커밋을 해야한다.
+꼭 gosu를 사용해야하는 지는 알수 없지만, gosu를 사용해서, container 실행시 사용자 계정을 만들고, 해당 계정으로 로그인하는 docker image를 만들 수 있다.&lt;/p&gt;
+
+&lt;p&gt;Reference: &lt;a href=&quot;https://denibertovic.com/posts/handling-permissions-with-docker-volumes/&quot;&gt;https://denibertovic.com/posts/handling-permissions-with-docker-volumes/&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Dockerfile&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; FROM baseimage
+
+ ENV http_proxy ???
+ ENV https_proxy ???
+
+ ENV HOSTNAME=docker
+ RUN apt-get update &amp;amp;&amp;amp; apt-get -y --no-install-recommends install \
+     ca-certificates \
+     curl \
+     sudo
+
+ RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+ RUN curl -o /usr/local/bin/gosu -SL &quot;https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)&quot; \
+     &amp;amp;&amp;amp; curl -o /usr/local/bin/gosu.asc -SL &quot;https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture).asc&quot; \
+     &amp;amp;&amp;amp; gpg --verify /usr/local/bin/gosu.asc \
+     &amp;amp;&amp;amp; rm /usr/local/bin/gosu.asc \
+     &amp;amp;&amp;amp; chmod +x /usr/local/bin/gosu
+
+ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+ ENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]
+ CMD [&quot;bin/bash&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;entrypoint.sh&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+ &lt;span class=&quot;nv&quot;&gt;USER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LOCAL_USER_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;9001&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+ &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Start with UID : &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+ &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -eq 0]; &lt;span class=&quot;k&quot;&gt;then
+     &lt;/span&gt;getent passwd &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; &amp;gt; /dev/null 2&amp;amp;&amp;gt;1
+     &lt;span class=&quot;nv&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
+	
+     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt; -eq 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
+         &lt;/span&gt;useradd --shell /bin/bash -u &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -o -c &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; -d /home/user -M user-&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;
+         &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;user-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; ALL=(ALL) NOPASSWD: ALL&quot;&lt;/span&gt; &amp;gt;&amp;gt; etc/sudoers
+     &lt;span class=&quot;k&quot;&gt;fi
+	
+     if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! -e /home/user &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
+         &lt;/span&gt;mkdir -p /home/user
+     &lt;span class=&quot;k&quot;&gt;fi
+     &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;HOME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/user
+	
+     &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /usr/local/bin/gosu user_&lt;span class=&quot;nv&quot;&gt;$USE_ID&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;fi
+
+ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;create image using Dockerfile&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ docker build -t &amp;lt;image_name&amp;gt; &amp;lt;Dockerfile path&amp;gt;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;execute as a specific user&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ docker run -it -e LOCAL_USER_ID=`id -u $USER` myimage&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;migration&quot;&gt;Migration&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;change uid&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ usermod -u &amp;lt;new id&amp;gt; &amp;lt;id&amp;gt;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;change permission outside user home&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ find / -uid &amp;lt;old id&amp;gt; -exec chown -R &amp;lt;id&amp;gt; {} \;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Wed, 06 Sep 2017 00:00:00 +0900</pubDate>
+        <link>http://tesigner.github.io/dev/common/2017/09/06/docker-memo.html</link>
+        <guid isPermaLink="true">http://tesigner.github.io/dev/common/2017/09/06/docker-memo.html</guid>
+        
+        
+        <category>dev</category>
+        
+        <category>common</category>
+        
+      </item>
     
       <item>
         <title>Emacs configuration</title>
