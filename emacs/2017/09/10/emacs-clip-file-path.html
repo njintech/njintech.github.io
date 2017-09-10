@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>tesigners</title>
-  <meta name="description" content="">
+  <title>copying full path of current file in emacs</title>
+  <meta name="description" content="copy below function into .emacs.d/init.el">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/">
+  <link rel="canonical" href="http://tesigner.github.io/emacs/2017/09/10/emacs-clip-file-path.html">
   <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
 </head>
 
@@ -54,81 +54,32 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">copying full path of current file in emacs</h1>
+    <p class="post-meta"><time datetime="2017-09-10T00:00:00+09:00" itemprop="datePublished">Sep 10, 2017</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>copy below function into <strong>.emacs.d/init.el</strong></p>
 
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/10/ubuntu-ca-install.html">register Cerificates manually in ubuntu</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/10/latex-fonts.html">latex에서 한글 밎 다양한 font 사용하기</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/emacs/2017/09/10/emacs-clip-file-path.html">copying full path of current file in emacs</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/10/3beol-linux.html">ubuntu에서 세벌식 입력기 사용하기</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 6, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/dev/common/2017/09/06/docker-memo.html">Tips for Docker Install and Usage</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 6, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/emacs/2017/09/06/EmacsForMe.html">Emacs configuration</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 16, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/essay/2017/08/16/EssayOnDockerUsage.html">Docker 사용에 대한 단상</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 7, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/deep-learning/2017/08/07/Caffe-Install.html">Docker ubuntu 16.04에서 Caffe 설치</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
+<div class="highlighter-rouge"><pre class="highlight"><code>(defun clip-file-path ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+</code></pre>
 </div>
+
+
+  </div>
+
+</article>
 
       </div>
     </div>

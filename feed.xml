@@ -5,9 +5,130 @@
     <description></description>
     <link>http://tesigner.github.io/</link>
     <atom:link href="http://tesigner.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 10 Sep 2017 15:37:26 +0900</pubDate>
-    <lastBuildDate>Sun, 10 Sep 2017 15:37:26 +0900</lastBuildDate>
+    <pubDate>Sun, 10 Sep 2017 21:18:51 +0900</pubDate>
+    <lastBuildDate>Sun, 10 Sep 2017 21:18:51 +0900</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>register Cerificates manually in ubuntu</title>
+        <description>&lt;p&gt;사내에서는 웹사이트 인증서를 따로 설치해야 할 필요가 있다&lt;/p&gt;
+
+&lt;p&gt;인증서 import 기능을 제공하는 브라우저에서는, 해당 메뉴를 사용하면 되고
+그렇지 않은 경우는 시스템에 등록해야 한다.&lt;/p&gt;
+
+&lt;p&gt;ubuntu에서는 아래 command line 명령을 사용해 등록한다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;copy certificate files to /usr/local/share/ca-certificates&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+$ sudo cp &amp;lt;path-to-ca-file&amp;gt; /usr/local/share/ca-certificates
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;register&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+$ sudo update-ca-certificates
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
+        <link>http://tesigner.github.io/dev-common/2017/09/10/ubuntu-ca-install.html</link>
+        <guid isPermaLink="true">http://tesigner.github.io/dev-common/2017/09/10/ubuntu-ca-install.html</guid>
+        
+        
+        <category>dev-common</category>
+        
+      </item>
+    
+      <item>
+        <title>latex에서 한글 밎 다양한 font 사용하기</title>
+        <description>&lt;p&gt;latex 기본 폰트는 읽을때 심적으로 부담을 가지게 한다. 적어도 나에게는 그렇다. 텍스트만으로 가득한 문서에나 어울릴 것 같은 폰트 같이 느껴진다. 그래서, latex으로 만들 문서를 좀더 읽기 편하게 만들어 주기 위한 폰트를 사용할 수 있는 방법을 다음과 같이 기록해 둔다.&lt;/p&gt;
+
+&lt;h1 id=&quot;install-extra-font&quot;&gt;install extra font&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install texlive-fonts-extra```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;type-in-korean&quot;&gt;type in Korean&lt;/h1&gt;
+
+&lt;p&gt;Latex 문서는 가능하면 영어로만 작성하려고 하지만, 문서의 목적 상 한글을 사용할 수 밖에 없는 경우도 많다.
+아래는 Latex에서 한글 입력이 가능하도록 하는 방법이다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install ko.tex
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;다음 구문을 latex문서에 삽입하면 한글을 사용할 수 있다.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+\usepackage{kotex}
+&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
+        <link>http://tesigner.github.io/dev-common/2017/09/10/latex-fonts.html</link>
+        <guid isPermaLink="true">http://tesigner.github.io/dev-common/2017/09/10/latex-fonts.html</guid>
+        
+        
+        <category>dev-common</category>
+        
+      </item>
+    
+      <item>
+        <title>copying full path of current file in emacs</title>
+        <description>&lt;p&gt;copy below function into &lt;strong&gt;.emacs.d/init.el&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(defun clip-file-path ()
+  &quot;Copy the current buffer file name to the clipboard.&quot;
+  (interactive)
+  (let ((filename (if (equal major-mode &#39;dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message &quot;Copied buffer file name &#39;%s&#39; to the clipboard.&quot; filename))))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
+        <link>http://tesigner.github.io/emacs/2017/09/10/emacs-clip-file-path.html</link>
+        <guid isPermaLink="true">http://tesigner.github.io/emacs/2017/09/10/emacs-clip-file-path.html</guid>
+        
+        
+        <category>emacs</category>
+        
+      </item>
+    
+      <item>
+        <title>ubuntu에서 세벌식 입력기 사용하기</title>
+        <description>&lt;p&gt;우분투에서 세벌식 한글 입력기를 사용하기 위한 방법이다.&lt;br /&gt;
+한글 사용을 위한 ibus-hangul설치가 된 환경을 전제로 한다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;세벌식 자판중에서는 최종보다는 신세벌식 2012를 사용하기를 권장한다.&lt;/p&gt;
+
+&lt;h1 id=&quot;install&quot;&gt;install&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo add-apt-repository -y ppa:createsc/3beol
+$ sudo apt-get update -y
+$ sudo apt-get upgrade -y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;remove&quot;&gt;remove&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install -y ppa-purge
+$ sudo ppa-purge ppa:createsc/3beol
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
+        <link>http://tesigner.github.io/dev-common/2017/09/10/3beol-linux.html</link>
+        <guid isPermaLink="true">http://tesigner.github.io/dev-common/2017/09/10/3beol-linux.html</guid>
+        
+        
+        <category>dev-common</category>
+        
+      </item>
     
       <item>
         <title>Tips for Docker Install and Usage</title>
