@@ -5,8 +5,8 @@
     <description></description>
     <link>http://tesigner.github.io/</link>
     <atom:link href="http://tesigner.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 06 Sep 2017 21:26:15 +0900</pubDate>
-    <lastBuildDate>Wed, 06 Sep 2017 21:26:15 +0900</lastBuildDate>
+    <pubDate>Sun, 10 Sep 2017 15:37:26 +0900</pubDate>
+    <lastBuildDate>Sun, 10 Sep 2017 15:37:26 +0900</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -108,7 +108,7 @@ instead create &lt;strong&gt;docker&lt;/strong&gt; group&lt;/p&gt;
  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Start with UID : &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -eq 0]; &lt;span class=&quot;k&quot;&gt;then
-     &lt;/span&gt;getent passwd &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; &amp;gt; /dev/null 2&amp;amp;&amp;gt;1
+     &lt;/span&gt;getent passwd &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; &amp;gt; /dev/null 2&amp;gt;&amp;amp;1
      &lt;span class=&quot;nv&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
 	
      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt; -eq 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
@@ -170,7 +170,7 @@ instead create &lt;strong&gt;docker&lt;/strong&gt; group&lt;/p&gt;
 &lt;h1 id=&quot;proxy&quot;&gt;proxy&lt;/h1&gt;
 
 &lt;p&gt;방화벽 내부에서 MELPA를 사용하려면 proxy설정이 필요하다.&lt;br /&gt;
-init.el에 다음의 proxy설정을 추가하면 된다.&lt;/p&gt;
+init.el에 다음의 proxy설정을 추가한다.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(setq url-proxy-services
    &#39;((&quot;no_proxy&quot; . &quot;^\\(localhost\\|10.*\\)&quot;)
@@ -182,13 +182,13 @@ init.el에 다음의 proxy설정을 추가하면 된다.&lt;/p&gt;
 &lt;p&gt;no_proxy는 regex matching으로 표현된다.&lt;/p&gt;
 
 &lt;h1 id=&quot;helm-install-and-configuration&quot;&gt;helm install and configuration&lt;/h1&gt;
+
 &lt;p&gt;vim에서는 ctags, cscope조합을 사용했는데, code browser로 helm을 사용한다.&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;mac&lt;/p&gt;
-
-    &lt;p&gt;mac에서는 init.el의 command로 MELPA를 이용해 설치한다.&lt;/p&gt;
+    &lt;p&gt;mac&lt;br /&gt;
+mac에서는 init.el의 command로 MELPA를 이용해 설치한다.&lt;/p&gt;
 
     &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(require &#39;setup-helm)
 (require &#39;setup-helm-gtags))
@@ -196,20 +196,53 @@ init.el에 다음의 proxy설정을 추가하면 된다.&lt;/p&gt;
     &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;ubuntu&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install elpa-helm
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
+    &lt;p&gt;ubuntu&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+apt-get install elpa-helm
+&lt;/code&gt;&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h1 id=&quot;etc-settings-in-emacsdinitel&quot;&gt;etc. settings in .emacs.d/init.el&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;enable auto revert buffer&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(global-auto-revert-mode 1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;file name with full path on frame&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(setq-default frame-title-format &quot;%b (%f)&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;enable menubar by default&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(menu-bar-mode t)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;theme&quot;&gt;theme&lt;/h1&gt;
+&lt;p&gt;흰색 바탕의 심플한 theme중 괜찮은 theme&lt;br /&gt;
+&lt;a href=&quot;https://github.com/owainlewis/emacs-color-themes&quot;&gt;sublime-theme:McCarthy&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;M-x package-install &amp;lt;RET&amp;gt; sublime-themes
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 </description>
         <pubDate>Wed, 06 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://tesigner.github.io/dev-common/2017/09/06/EmacsForMe.html</link>
-        <guid isPermaLink="true">http://tesigner.github.io/dev-common/2017/09/06/EmacsForMe.html</guid>
+        <link>http://tesigner.github.io/emacs/2017/09/06/EmacsForMe.html</link>
+        <guid isPermaLink="true">http://tesigner.github.io/emacs/2017/09/06/EmacsForMe.html</guid>
         
         
-        <category>dev-common</category>
+        <category>emacs</category>
         
       </item>
     
