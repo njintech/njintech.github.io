@@ -5,8 +5,8 @@
     <description></description>
     <link>http://tesigner.github.io/</link>
     <atom:link href="http://tesigner.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 10 Sep 2017 21:18:51 +0900</pubDate>
-    <lastBuildDate>Sun, 10 Sep 2017 21:18:51 +0900</lastBuildDate>
+    <pubDate>Sat, 16 Sep 2017 16:18:22 +0900</pubDate>
+    <lastBuildDate>Sat, 16 Sep 2017 16:18:22 +0900</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -191,64 +191,71 @@ instead create &lt;strong&gt;docker&lt;/strong&gt; group&lt;/p&gt;
 &lt;p&gt;Reference: &lt;a href=&quot;https://denibertovic.com/posts/handling-permissions-with-docker-volumes/&quot;&gt;https://denibertovic.com/posts/handling-permissions-with-docker-volumes/&lt;/a&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Dockerfile&lt;/p&gt;
+  &lt;li&gt;Dockerfile&lt;/li&gt;
+&lt;/ol&gt;
 
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; FROM baseimage
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        FROM baseimage
+	
+        ENV http_proxy ???
+        ENV https_proxy ???
+        ENV HOSTNAME=docker
 
- ENV http_proxy ???
- ENV https_proxy ???
-
- ENV HOSTNAME=docker
- RUN apt-get update &amp;amp;&amp;amp; apt-get -y --no-install-recommends install \
-     ca-certificates \
-     curl \
-     sudo
-
- RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
- RUN curl -o /usr/local/bin/gosu -SL &quot;https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)&quot; \
-     &amp;amp;&amp;amp; curl -o /usr/local/bin/gosu.asc -SL &quot;https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture).asc&quot; \
-     &amp;amp;&amp;amp; gpg --verify /usr/local/bin/gosu.asc \
-     &amp;amp;&amp;amp; rm /usr/local/bin/gosu.asc \
-     &amp;amp;&amp;amp; chmod +x /usr/local/bin/gosu
-
- COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
- ENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]
- CMD [&quot;bin/bash&quot;]
+        RUN groupadd developer        
+        RUN apt-get update &amp;amp;&amp;amp; apt-get -y --no-install-recommends install \
+            ca-certificates \
+            curl \
+            sudo
+    
+        RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+        RUN curl -o /usr/local/bin/gosu -SL &quot;https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)&quot; \
+            &amp;amp;&amp;amp; curl -o /usr/local/bin/gosu.asc -SL &quot;https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture).asc&quot; \
+            &amp;amp;&amp;amp; gpg --verify /usr/local/bin/gosu.asc \
+            &amp;amp;&amp;amp; rm /usr/local/bin/gosu.asc \
+            &amp;amp;&amp;amp; chmod +x /usr/local/bin/gosu
+    
+        COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+	
+        ENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]
+        CMD [&quot;bin/bash&quot;]
 &lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;entrypoint.sh&lt;/p&gt;
+&lt;/div&gt;
+&lt;ol&gt;
+  &lt;li&gt;entrypoint.sh&lt;/li&gt;
+&lt;/ol&gt;
 
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-
- &lt;span class=&quot;nv&quot;&gt;USER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LOCAL_USER_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;9001&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-
- &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Start with UID : &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-
- &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -eq 0]; &lt;span class=&quot;k&quot;&gt;then
-     &lt;/span&gt;getent passwd &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; &amp;gt; /dev/null 2&amp;gt;&amp;amp;1
-     &lt;span class=&quot;nv&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
-	
-     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt; -eq 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
-         &lt;/span&gt;useradd --shell /bin/bash -u &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -o -c &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; -d /home/user -M user-&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;
-         &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;user-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; ALL=(ALL) NOPASSWD: ALL&quot;&lt;/span&gt; &amp;gt;&amp;gt; etc/sudoers
-     &lt;span class=&quot;k&quot;&gt;fi
-	
-     if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! -e /home/user &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
-         &lt;/span&gt;mkdir -p /home/user
-     &lt;span class=&quot;k&quot;&gt;fi
-     &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;HOME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/user
-	
-     &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /usr/local/bin/gosu user_&lt;span class=&quot;nv&quot;&gt;$USE_ID&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
- &lt;span class=&quot;k&quot;&gt;fi
-
- &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        &lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+    
+        &lt;span class=&quot;nv&quot;&gt;USER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LOCAL_USER_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;9001&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Start with UID : &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -eq 0]; &lt;span class=&quot;k&quot;&gt;then
+            &lt;/span&gt;getent passwd &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; &amp;gt; /dev/null 2&amp;gt;&amp;amp;1
+            &lt;span class=&quot;nv&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt;
+    	
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! &lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt; -eq 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
+                &lt;/span&gt;useradd --shell /bin/bash -u &lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; -o -c &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; -d /home/user -M user-&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;
+                &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;user-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; ALL=(ALL) NOPASSWD: ALL&quot;&lt;/span&gt; &amp;gt;&amp;gt; etc/sudoers
+            &lt;span class=&quot;k&quot;&gt;fi
+	    	&lt;/span&gt;usermod -a -G developer user-&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt;
+	    	
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; ! -e /home/user &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then
+                &lt;/span&gt;mkdir -p /home/user
+            &lt;span class=&quot;k&quot;&gt;fi
+            
+            &lt;/span&gt;chown :developer /home/user
+            chmod 775 /home/user
+            
+            &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;HOME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/user
+    	
+            &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /usr/local/bin/gosu user_&lt;span class=&quot;nv&quot;&gt;$USE_ID&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;fi
+    
+        &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
+&lt;/div&gt;
+
+&lt;ol&gt;
   &lt;li&gt;
     &lt;p&gt;create image using Dockerfile&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;$ docker build -t &amp;lt;image_name&amp;gt; &amp;lt;Dockerfile path&amp;gt;&lt;/code&gt;&lt;/p&gt;
@@ -347,6 +354,54 @@ apt-get install elpa-helm
 &lt;/ul&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(menu-bar-mode t)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;control transparency&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; ;;(set-frame-parameter (selected-frame) &#39;alpha &#39;(&amp;lt;active&amp;gt; . &amp;lt;inactive&amp;gt;))
+ ;;(set-frame-parameter (selected-frame) &#39;alpha &amp;lt;both&amp;gt;)
+ (set-frame-parameter (selected-frame) &#39;alpha &#39;(85 . 50))
+ (add-to-list &#39;default-frame-alist &#39;(alpha . (85 . 50)))
+ 
+ (defun toggle-transparency ()
+   (interactive)
+   (let ((alpha (frame-parameter nil &#39;alpha)))
+     (set-frame-parameter
+      nil &#39;alpha
+      (if (eql (cond ((numberp alpha) alpha)
+                     ((numberp (cdr alpha)) (cdr alpha))
+                     ;; Also handle undocumented (&amp;lt;active&amp;gt; &amp;lt;inactive&amp;gt;) form.
+                     ((numberp (cadr alpha)) (cadr alpha)))
+               100)
+          &#39;(85 . 50) &#39;(100 . 100)))))
+ (global-set-key (kbd &quot;C-c t&quot;) &#39;toggle-transparency)
+ 
+  ;; Set transparency of emacs
+ (defun transparency (value)
+   &quot;Sets the transparency of the frame window. 0=transparent/100=opaque&quot;
+   (interactive &quot;nTransparency Value 0 - 100 opaque:&quot;)
+   (set-frame-parameter (selected-frame) &#39;alpha value))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;# how to import user configuration file(.el)&lt;br /&gt;
+.emacs.d/init.el:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(defconst user-init-dir
+	(cond ((boundp &#39;user-emacs-directory)
+		   user-emacs-directory)
+		  ((boundp &#39;user-init-directory)
+		   user-init-directory)
+		  (t &quot;~/.emacs.d/&quot;)))
+
+(defun load-user-file (file)
+  (interactive &quot;f&quot;)
+  &quot;Load a file in current user&#39;s configuration directory&quot;
+  (load-file (expand-file-name file user-init-dir)))
+  
+(load-user-file &quot;personal.el&quot;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 

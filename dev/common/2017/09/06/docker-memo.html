@@ -121,64 +121,71 @@ instead create <strong>docker</strong> group</p>
 <p>Reference: <a href="https://denibertovic.com/posts/handling-permissions-with-docker-volumes/">https://denibertovic.com/posts/handling-permissions-with-docker-volumes/</a></p>
 
 <ol>
-  <li>
-    <p>Dockerfile</p>
+  <li>Dockerfile</li>
+</ol>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> FROM baseimage
+<div class="highlighter-rouge"><pre class="highlight"><code>        FROM baseimage
+	
+        ENV http_proxy ???
+        ENV https_proxy ???
+        ENV HOSTNAME=docker
 
- ENV http_proxy ???
- ENV https_proxy ???
-
- ENV HOSTNAME=docker
- RUN apt-get update &amp;&amp; apt-get -y --no-install-recommends install \
-     ca-certificates \
-     curl \
-     sudo
-
- RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
- RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
-     &amp;&amp; curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture).asc" \
-     &amp;&amp; gpg --verify /usr/local/bin/gosu.asc \
-     &amp;&amp; rm /usr/local/bin/gosu.asc \
-     &amp;&amp; chmod +x /usr/local/bin/gosu
-
- COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
- ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
- CMD ["bin/bash"]
+        RUN groupadd developer        
+        RUN apt-get update &amp;&amp; apt-get -y --no-install-recommends install \
+            ca-certificates \
+            curl \
+            sudo
+    
+        RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+        RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
+            &amp;&amp; curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture).asc" \
+            &amp;&amp; gpg --verify /usr/local/bin/gosu.asc \
+            &amp;&amp; rm /usr/local/bin/gosu.asc \
+            &amp;&amp; chmod +x /usr/local/bin/gosu
+    
+        COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+	
+        ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+        CMD ["bin/bash"]
 </code></pre>
-    </div>
-  </li>
-  <li>
-    <p>entrypoint.sh</p>
+</div>
+<ol>
+  <li>entrypoint.sh</li>
+</ol>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> <span class="c">#!/bin/bash</span>
-
- <span class="nv">USER_ID</span><span class="o">=</span><span class="k">${</span><span class="nv">LOCAL_USER_ID</span><span class="k">:-</span><span class="nv">9001</span><span class="k">}</span>
-
- <span class="nb">echo</span> <span class="s2">"Start with UID : </span><span class="nv">$USER_ID</span><span class="s2">"</span>
-
- <span class="k">if</span> <span class="o">[</span> ! <span class="nv">$USER_ID</span> -eq 0]; <span class="k">then
-     </span>getent passwd <span class="nv">$USER_ID</span> &gt; /dev/null 2&gt;&amp;1
-     <span class="nv">result</span><span class="o">=</span><span class="nv">$?</span>
-	
-     <span class="k">if</span> <span class="o">[</span> ! <span class="nv">$result</span> -eq 0 <span class="o">]</span>; <span class="k">then
-         </span>useradd --shell /bin/bash -u <span class="nv">$USER_ID</span> -o -c <span class="s2">""</span> -d /home/user -M user-<span class="nv">$USER_ID</span>
-         <span class="nb">echo</span> <span class="s2">"user-</span><span class="nv">$USER_ID</span><span class="s2"> ALL=(ALL) NOPASSWD: ALL"</span> &gt;&gt; etc/sudoers
-     <span class="k">fi
-	
-     if</span> <span class="o">[</span> ! -e /home/user <span class="o">]</span>; <span class="k">then
-         </span>mkdir -p /home/user
-     <span class="k">fi
-     </span><span class="nb">export </span><span class="nv">HOME</span><span class="o">=</span>/home/user
-	
-     <span class="nb">exec</span> /usr/local/bin/gosu user_<span class="nv">$USE_ID</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
- <span class="k">fi
-
- </span><span class="nb">exec</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="c">#!/bin/bash</span>
+    
+        <span class="nv">USER_ID</span><span class="o">=</span><span class="k">${</span><span class="nv">LOCAL_USER_ID</span><span class="k">:-</span><span class="nv">9001</span><span class="k">}</span>
+    
+        <span class="nb">echo</span> <span class="s2">"Start with UID : </span><span class="nv">$USER_ID</span><span class="s2">"</span>
+    
+        <span class="k">if</span> <span class="o">[</span> ! <span class="nv">$USER_ID</span> -eq 0]; <span class="k">then
+            </span>getent passwd <span class="nv">$USER_ID</span> &gt; /dev/null 2&gt;&amp;1
+            <span class="nv">result</span><span class="o">=</span><span class="nv">$?</span>
+    	
+            <span class="k">if</span> <span class="o">[</span> ! <span class="nv">$result</span> -eq 0 <span class="o">]</span>; <span class="k">then
+                </span>useradd --shell /bin/bash -u <span class="nv">$USER_ID</span> -o -c <span class="s2">""</span> -d /home/user -M user-<span class="nv">$USER_ID</span>
+                <span class="nb">echo</span> <span class="s2">"user-</span><span class="nv">$USER_ID</span><span class="s2"> ALL=(ALL) NOPASSWD: ALL"</span> &gt;&gt; etc/sudoers
+            <span class="k">fi
+	    	</span>usermod -a -G developer user-<span class="nv">$USER_ID</span>
+	    	
+            <span class="k">if</span> <span class="o">[</span> ! -e /home/user <span class="o">]</span>; <span class="k">then
+                </span>mkdir -p /home/user
+            <span class="k">fi
+            
+            </span>chown :developer /home/user
+            chmod 775 /home/user
+            
+            <span class="nb">export </span><span class="nv">HOME</span><span class="o">=</span>/home/user
+    	
+            <span class="nb">exec</span> /usr/local/bin/gosu user_<span class="nv">$USE_ID</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+        <span class="k">fi
+    
+        </span><span class="nb">exec</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
 </code></pre>
-    </div>
-  </li>
+</div>
+
+<ol>
   <li>
     <p>create image using Dockerfile<br />
 <code class="highlighter-rouge">$ docker build -t &lt;image_name&gt; &lt;Dockerfile path&gt;</code></p>

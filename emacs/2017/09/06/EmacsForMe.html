@@ -128,6 +128,54 @@ apt-get install elpa-helm
 </code></pre>
 </div>
 
+<ul>
+  <li>control transparency</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> ;;(set-frame-parameter (selected-frame) 'alpha '(&lt;active&gt; . &lt;inactive&gt;))
+ ;;(set-frame-parameter (selected-frame) 'alpha &lt;both&gt;)
+ (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+ (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+ 
+ (defun toggle-transparency ()
+   (interactive)
+   (let ((alpha (frame-parameter nil 'alpha)))
+     (set-frame-parameter
+      nil 'alpha
+      (if (eql (cond ((numberp alpha) alpha)
+                     ((numberp (cdr alpha)) (cdr alpha))
+                     ;; Also handle undocumented (&lt;active&gt; &lt;inactive&gt;) form.
+                     ((numberp (cadr alpha)) (cadr alpha)))
+               100)
+          '(85 . 50) '(100 . 100)))))
+ (global-set-key (kbd "C-c t") 'toggle-transparency)
+ 
+  ;; Set transparency of emacs
+ (defun transparency (value)
+   "Sets the transparency of the frame window. 0=transparent/100=opaque"
+   (interactive "nTransparency Value 0 - 100 opaque:")
+   (set-frame-parameter (selected-frame) 'alpha value))
+</code></pre>
+</div>
+<p># how to import user configuration file(.el)<br />
+.emacs.d/init.el:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(defconst user-init-dir
+	(cond ((boundp 'user-emacs-directory)
+		   user-emacs-directory)
+		  ((boundp 'user-init-directory)
+		   user-init-directory)
+		  (t "~/.emacs.d/")))
+
+(defun load-user-file (file)
+  (interactive "f")
+  "Load a file in current user's configuration directory"
+  (load-file (expand-file-name file user-init-dir)))
+  
+(load-user-file "personal.el")
+</code></pre>
+</div>
+
 <h1 id="theme">theme</h1>
 <p>흰색 바탕의 심플한 theme중 괜찮은 theme<br />
 <a href="https://github.com/owainlewis/emacs-color-themes">sublime-theme:McCarthy</a></p>
