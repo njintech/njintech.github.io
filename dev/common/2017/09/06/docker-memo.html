@@ -178,7 +178,7 @@ instead create <strong>docker</strong> group</p>
             
             <span class="nb">export </span><span class="nv">HOME</span><span class="o">=</span>/home/user
     	
-            <span class="nb">exec</span> /usr/local/bin/gosu user_<span class="nv">$USE_ID</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+            <span class="nb">exec</span> /usr/local/bin/gosu user-<span class="nv">$USER_ID</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
         <span class="k">fi
     
         </span><span class="nb">exec</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>

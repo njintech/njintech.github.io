@@ -5,8 +5,8 @@
     <description></description>
     <link>http://tesigner.github.io/</link>
     <atom:link href="http://tesigner.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 16 Sep 2017 16:33:02 +0900</pubDate>
-    <lastBuildDate>Sat, 16 Sep 2017 16:33:02 +0900</lastBuildDate>
+    <pubDate>Thu, 21 Sep 2017 05:08:26 +0900</pubDate>
+    <lastBuildDate>Thu, 21 Sep 2017 05:08:26 +0900</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -267,7 +267,7 @@ instead create &lt;strong&gt;docker&lt;/strong&gt; group&lt;/p&gt;
             
             &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;HOME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/user
     	
-            &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /usr/local/bin/gosu user_&lt;span class=&quot;nv&quot;&gt;$USE_ID&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /usr/local/bin/gosu user-&lt;span class=&quot;nv&quot;&gt;$USER_ID&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;fi
     
         &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
