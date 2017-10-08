@@ -133,7 +133,7 @@ instead create <strong>docker</strong> group</p>
         RUN groupadd developer        
         RUN apt-get update &amp;&amp; apt-get -y --no-install-recommends install \
             ca-certificates \
-            curl \
+            curl tzdata \
             sudo
     
         RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
@@ -142,7 +142,11 @@ instead create <strong>docker</strong> group</p>
             &amp;&amp; gpg --verify /usr/local/bin/gosu.asc \
             &amp;&amp; rm /usr/local/bin/gosu.asc \
             &amp;&amp; chmod +x /usr/local/bin/gosu
-    
+            
+        RUN echo "Asia/Seoul" &gt; /etc/timezone
+        RUN rm /etc/localtime
+        RUN dpkg-reconfigure -f noninteractive tzdata
+	    
         COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 	
         ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
@@ -194,6 +198,10 @@ instead create <strong>docker</strong> group</p>
     <p>execute as a specific user<br />
 <code class="highlighter-rouge">$ docker run -it -e LOCAL_USER_ID=`id -u $USER` myimage</code></p>
   </li>
+  <li>
+    <p>Sync timezone with host server
+<code class="highlighter-rouge">$ docker run -it -v /etc/localtime:/etc/localtime:ro -e LOCAL_USER_ID=`id -u $USER` myimage</code></p>
+  </li>
 </ol>
 
 <h1 id="migration">Migration</h1>
@@ -207,6 +215,18 @@ instead create <strong>docker</strong> group</p>
 <code class="highlighter-rouge">$ find / -uid &lt;old id&gt; -exec chown -R &lt;id&gt; {} \;</code></p>
   </li>
 </ol>
+
+<h1 id="tips">Tips</h1>
+<ol>
+  <li>delete/kill/ all containers or images</li>
+</ol>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ docker rm $(docker ps -a -q -f status=exited)
+$ docker kill $(docker ps -q)
+$ docker rmi $(docker images -q)
+</code></pre>
+</div>
+
 
   </div>
 
