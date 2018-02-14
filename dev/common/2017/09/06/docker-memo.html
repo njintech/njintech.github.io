@@ -10,8 +10,8 @@
   <meta name="description" content="Installreference: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/dev/common/2017/09/06/docker-memo.html">
-  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/dev/common/2017/09/06/docker-memo.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -124,7 +124,7 @@ instead create <strong>docker</strong> group</p>
   <li>Dockerfile</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        FROM baseimage
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        FROM baseimage
 	
         ENV http_proxy ???
         ENV https_proxy ???
@@ -151,34 +151,33 @@ instead create <strong>docker</strong> group</p>
 	
         ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
         CMD ["bin/bash"]
-</code></pre>
-</div>
+</code></pre></div></div>
 <ol>
   <li>entrypoint.sh</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="c">#!/bin/bash</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c">#!/bin/bash</span>
     
         <span class="nv">USER_ID</span><span class="o">=</span><span class="k">${</span><span class="nv">LOCAL_USER_ID</span><span class="k">:-</span><span class="nv">9001</span><span class="k">}</span>
     
         <span class="nb">echo</span> <span class="s2">"Start with UID : </span><span class="nv">$USER_ID</span><span class="s2">"</span>
     
-        <span class="k">if</span> <span class="o">[</span> ! <span class="nv">$USER_ID</span> -eq 0]; <span class="k">then
-            </span>getent passwd <span class="nv">$USER_ID</span> &gt; /dev/null 2&gt;&amp;1
+        <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nv">$USER_ID</span> <span class="nt">-eq</span> 0]<span class="p">;</span> <span class="k">then
+            </span>getent passwd <span class="nv">$USER_ID</span> <span class="o">&gt;</span> /dev/null 2&gt;&amp;1
             <span class="nv">result</span><span class="o">=</span><span class="nv">$?</span>
     	
-            <span class="k">if</span> <span class="o">[</span> ! <span class="nv">$result</span> -eq 0 <span class="o">]</span>; <span class="k">then
-                </span>useradd --shell /bin/bash -u <span class="nv">$USER_ID</span> -o -c <span class="s2">""</span> -d /home/user -M user-<span class="nv">$USER_ID</span>
-                <span class="nb">echo</span> <span class="s2">"user-</span><span class="nv">$USER_ID</span><span class="s2"> ALL=(ALL) NOPASSWD: ALL"</span> &gt;&gt; etc/sudoers
+            <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nv">$result</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+                </span>useradd <span class="nt">--shell</span> /bin/bash <span class="nt">-u</span> <span class="nv">$USER_ID</span> <span class="nt">-o</span> <span class="nt">-c</span> <span class="s2">""</span> <span class="nt">-d</span> /home/user <span class="nt">-M</span> user-<span class="nv">$USER_ID</span>
+                <span class="nb">echo</span> <span class="s2">"user-</span><span class="nv">$USER_ID</span><span class="s2"> ALL=(ALL) NOPASSWD: ALL"</span> <span class="o">&gt;&gt;</span> etc/sudoers
             <span class="k">fi
-	    	</span>usermod -a -G developer user-<span class="nv">$USER_ID</span>
+	    	</span>usermod <span class="nt">-a</span> <span class="nt">-G</span> developer user-<span class="nv">$USER_ID</span>
 	    	
-            <span class="k">if</span> <span class="o">[</span> ! -e /home/user <span class="o">]</span>; <span class="k">then
-                </span>mkdir -p /home/user
+            <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-e</span> /home/user <span class="o">]</span><span class="p">;</span> <span class="k">then
+                </span><span class="nb">mkdir</span> <span class="nt">-p</span> /home/user
             <span class="k">fi
             
-            </span>chown :developer /home/user
-            chmod 775 /home/user
+            </span><span class="nb">chown</span> :developer /home/user
+            <span class="nb">chmod </span>775 /home/user
             
             <span class="nb">export </span><span class="nv">HOME</span><span class="o">=</span>/home/user
     	
@@ -186,8 +185,7 @@ instead create <strong>docker</strong> group</p>
         <span class="k">fi
     
         </span><span class="nb">exec</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>
@@ -221,11 +219,24 @@ instead create <strong>docker</strong> group</p>
   <li>delete/kill/ all containers or images</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker rm $(docker ps -a -q -f status=exited)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker rm $(docker ps -a -q -f status=exited)
 $ docker kill $(docker ps -q)
 $ docker rmi $(docker images -q)
-</code></pre>
-</div>
+</code></pre></div></div>
+
+<ol>
+  <li>remove all untagged images</li>
+</ol>
+
+<table>
+  <tbody>
+    <tr>
+      <td>docker rmi $(docker images</td>
+      <td>grep “^<none>"</none></td>
+      <td>awk “{print $3}”)</td>
+    </tr>
+  </tbody>
+</table>
 
 
   </div>

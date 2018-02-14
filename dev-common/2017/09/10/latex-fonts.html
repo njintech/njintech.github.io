@@ -10,8 +10,8 @@
   <meta name="description" content="latex 기본 폰트는 읽을때 심적으로 부담을 가지게 한다. 적어도 나에게는 그렇다. 텍스트만으로 가득한 문서에나 어울릴 것 같은 폰트 같이 느껴진다. 그래서, latex으로 만들 문서를 좀더 읽기 편하게 만들어 주기 위한 폰트를 사용할 수 있는 방법을 다음과 같이 기록해 둔다.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/dev-common/2017/09/10/latex-fonts.html">
-  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/dev-common/2017/09/10/latex-fonts.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -65,23 +65,20 @@
     <p>latex 기본 폰트는 읽을때 심적으로 부담을 가지게 한다. 적어도 나에게는 그렇다. 텍스트만으로 가득한 문서에나 어울릴 것 같은 폰트 같이 느껴진다. 그래서, latex으로 만들 문서를 좀더 읽기 편하게 만들어 주기 위한 폰트를 사용할 수 있는 방법을 다음과 같이 기록해 둔다.</p>
 
 <h1 id="install-extra-font">install extra font</h1>
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo apt-get install texlive-fonts-extra```
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install texlive-fonts-extra```
+</code></pre></div></div>
 
 <h1 id="type-in-korean">type in Korean</h1>
 
 <p>Latex 문서는 가능하면 영어로만 작성하려고 하지만, 문서의 목적 상 한글을 사용할 수 밖에 없는 경우도 많다.
 아래는 Latex에서 한글 입력이 가능하도록 하는 방법이다.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo apt-get install ko.tex
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install ko.tex
+</code></pre></div></div>
 
-<p>다음 구문을 latex문서에 삽입하면 한글을 사용할 수 있다.<br />
-<code class="highlighter-rouge">
-\usepackage{kotex}
-</code></p>
+<p>다음 구문을 latex문서에 삽입하면 한글을 사용할 수 있다.<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\usepackage{kotex}
+</code></pre></div></div>
 
   </div>
 

@@ -10,8 +10,8 @@
   <meta name="description" content="사내에서는 웹사이트 인증서를 따로 설치해야 할 필요가 있다인증서 import 기능을 제공하는 브라우저에서는, 해당 메뉴를 사용하면 되고그렇지 않은 경우는 시스템에 등록해야 한다.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/dev-common/2017/09/10/ubuntu-ca-install.html">
-  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/dev-common/2017/09/10/ubuntu-ca-install.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -70,17 +70,13 @@
 <p>ubuntu에서는 아래 command line 명령을 사용해 등록한다.</p>
 
 <ol>
-  <li>
-    <p>copy certificate files to /usr/local/share/ca-certificates<br />
-<code class="highlighter-rouge">
-$ sudo cp &lt;path-to-ca-file&gt; /usr/local/share/ca-certificates
-</code></p>
+  <li>copy certificate files to /usr/local/share/ca-certificates<br />
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo cp &lt;path-to-ca-file&gt; /usr/local/share/ca-certificates
+</code></pre></div>    </div>
   </li>
-  <li>
-    <p>register<br />
-<code class="highlighter-rouge">
-$ sudo update-ca-certificates
-</code></p>
+  <li>register<br />
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo update-ca-certificates
+</code></pre></div>    </div>
   </li>
 </ol>
 

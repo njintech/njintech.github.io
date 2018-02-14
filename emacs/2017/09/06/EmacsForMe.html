@@ -10,8 +10,8 @@
   <meta name="description" content="이 포스팅은 내가 사용하는 Emacs의 기능들의 설치 및 설정 방법에 대한 기록이다.현재 사용중인 Emacs의 버전은 24.5.1이며, mac/ubuntu에서 사용중이다.따라서, mac과 ubuntu에 특화된 내용이 혼재할 수 있다.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/emacs/2017/09/06/EmacsForMe.html">
-  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/emacs/2017/09/06/EmacsForMe.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -71,12 +71,11 @@
 <p>방화벽 내부에서 MELPA를 사용하려면 proxy설정이 필요하다.<br />
 init.el에 다음의 proxy설정을 추가한다.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(setq url-proxy-services
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(setq url-proxy-services
    '(("no_proxy" . "^\\(localhost\\|10.*\\)")
      ("http" . "proxy.com:8080")
      ("https" . "proxy.com:8080")))
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>no_proxy는 regex matching으로 표현된다.</p>
 
@@ -89,16 +88,14 @@ init.el에 다음의 proxy설정을 추가한다.</p>
     <p>mac<br />
 mac에서는 init.el의 command로 MELPA를 이용해 설치한다.</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>(require 'setup-helm)
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(require 'setup-helm)
 (require 'setup-helm-gtags))
-</code></pre>
-    </div>
+</code></pre></div>    </div>
   </li>
   <li>
-    <p>ubuntu<br />
-<code class="highlighter-rouge">
-apt-get install elpa-helm
-</code></p>
+    <p>ubuntu<br /></p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get install elpa-helm
+</code></pre></div>    </div>
   </li>
 </ul>
 
@@ -108,31 +105,28 @@ apt-get install elpa-helm
   <li>enable auto revert buffer<br /></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(global-auto-revert-mode 1)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(global-auto-revert-mode 1)
+</code></pre></div></div>
 
 <ul>
   <li>file name with full path on frame</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(setq-default frame-title-format "%b (%f)")
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(setq-default frame-title-format "%b (%f)")
+</code></pre></div></div>
 
 <ul>
   <li>enable menubar by default</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(menu-bar-mode t)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(menu-bar-mode t)
+</code></pre></div></div>
 
 <ul>
   <li>control transparency</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> ;;(set-frame-parameter (selected-frame) 'alpha '(&lt;active&gt; . &lt;inactive&gt;))
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ;;(set-frame-parameter (selected-frame) 'alpha '(&lt;active&gt; . &lt;inactive&gt;))
  ;;(set-frame-parameter (selected-frame) 'alpha &lt;both&gt;)
  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
  (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
@@ -155,12 +149,11 @@ apt-get install elpa-helm
    "Sets the transparency of the frame window. 0=transparent/100=opaque"
    (interactive "nTransparency Value 0 - 100 opaque:")
    (set-frame-parameter (selected-frame) 'alpha value))
-</code></pre>
-</div>
-<p># how to import user configuration file(.el)<br />
-.emacs.d/init.el:</p>
+</code></pre></div></div>
+<h1 id="how-to-import-user-configuration-fileel">how to import user configuration file(.el)<br /></h1>
+<p>.emacs.d/init.el:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(defconst user-init-dir
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(defconst user-init-dir
 	(cond ((boundp 'user-emacs-directory)
 		   user-emacs-directory)
 		  ((boundp 'user-init-directory)
@@ -173,16 +166,14 @@ apt-get install elpa-helm
   (load-file (expand-file-name file user-init-dir)))
   
 (load-user-file "personal.el")
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h1 id="theme">theme</h1>
 <p>흰색 바탕의 심플한 theme중 괜찮은 theme<br />
 <a href="https://github.com/owainlewis/emacs-color-themes">sublime-theme:McCarthy</a></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>M-x package-install &lt;RET&gt; sublime-themes
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>M-x package-install &lt;RET&gt; sublime-themes
+</code></pre></div></div>
 
   </div>
 

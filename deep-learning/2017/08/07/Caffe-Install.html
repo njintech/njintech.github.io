@@ -10,8 +10,8 @@
   <meta name="description" content="1.package dependencies">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/deep-learning/2017/08/07/Caffe-Install.html">
-  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/deep-learning/2017/08/07/Caffe-Install.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -64,22 +64,20 @@
   <div class="post-content" itemprop="articleBody">
     <p>1.package dependencies</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler
 $sudo apt-get install --no-install-recommends libboost-all-dev
 $sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev libatlas-base-dev
 $sudo apt-get install cmake
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>2.caffe 소스 받기</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$git clone https://github.com/BVLC/caffe.git
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$git clone https://github.com/BVLC/caffe.git
+</code></pre></div></div>
 
 <p>3.compile</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$mkdir build
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$mkdir build
 $cd build
 $cmake ..
 $make all -j8
@@ -87,8 +85,7 @@ $make install
 $make runtest
 $make pycaffe
 $make distribute
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>env
@@ -97,13 +94,12 @@ export PYTHONPATH=$PYTHONPATH:/path/to/caffe-master/python</li>
 
 <p>5.commit docker image</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>변경된 docker container를 새로운 docker image에 commit한다.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>변경된 docker container를 새로운 docker image에 commit한다.
 
 $docker commit &lt;container ID&gt; &lt;NewImageName&gt;
 
 이때, NewImageName은 현재 실행중인 container의 image여도 된다.
-</code></pre>
-</div>
+</code></pre></div></div>
 
   </div>
 

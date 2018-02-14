@@ -10,8 +10,8 @@
   <meta name="description" content="Docker container내에서 gdb로 debugging을 할때 설정된 break point에서 break가 걸리지 않는 경우가 있다.docker container에서 정상적인 gdb사용을 위해서는 아래 옵션을 추가해서 docker container를 실행해야 한다.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tesigner.github.io/emacs/2017/09/16/gdb-inside-docker.html">
-  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://tesigner.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/emacs/2017/09/16/gdb-inside-docker.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -65,9 +65,8 @@
     <p>Docker container내에서 gdb로 debugging을 할때 설정된 break point에서 break가 걸리지 않는 경우가 있다.
 docker container에서 정상적인 gdb사용을 위해서는 아래 옵션을 추가해서 docker container를 실행해야 한다.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>docker run --security-opt seccomp:unconfined
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --security-opt seccomp:unconfined
+</code></pre></div></div>
 
 
   </div>
