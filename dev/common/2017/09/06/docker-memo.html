@@ -202,6 +202,34 @@ instead create <strong>docker</strong> group</p>
   </li>
 </ol>
 
+<h1 id="execution">Execution</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
+
+<span class="nv">CUDA_SO</span><span class="o">=</span><span class="k">$(</span><span class="se">\l</span>s /usr/lib/x86_64-linux-gnu/libcuda<span class="k">*</span> | xargs <span class="nt">-I</span><span class="o">{}</span> <span class="nb">echo</span> ‘-v <span class="o">{}</span>:<span class="o">{}</span>’<span class="k">)</span>
+<span class="nv">CUDA_LOCAL</span><span class="o">=</span><span class="k">$(</span><span class="se">\l</span>s <span class="nt">-d</span> /usr/local/cuda<span class="k">*</span> | xargs <span class="nt">-I</span><span class="o">{}</span> <span class="nb">echo</span> ‘-v <span class="o">{}</span>:<span class="o">{}</span>’<span class="k">)</span>
+<span class="nv">NVIDIA_SO</span><span class="o">=</span><span class="k">$(</span><span class="se">\l</span>s <span class="nt">-d</span> /usr/lib/nvidia<span class="k">*</span> | xargs <span class="nt">-I</span><span class="o">{}</span> <span class="nb">echo</span> ‘-v <span class="o">{}</span>:<span class="o">{}</span>’<span class="k">)</span>
+
+<span class="nv">DEVICES</span><span class="o">=</span><span class="k">$(</span><span class="se">\l</span>s /dev/nvidia<span class="k">*</span> | xargs <span class="nt">-I</span><span class="o">{}</span> <span class="nb">echo</span> —device <span class="o">{}</span>:<span class="o">{}</span>’<span class="k">)</span>
+<span class="nv">image_name</span><span class="o">=</span>&lt;image name&gt;
+<span class="nv">container_name</span><span class="o">=</span>&lt;prefix&gt;-<span class="k">$(</span><span class="nb">id</span> <span class="nt">-u</span> <span class="nt">-n</span> <span class="nv">$USER</span><span class="k">)</span>
+
+docker ps <span class="nt">-a</span> | <span class="nb">grep</span> <span class="k">${</span><span class="nv">container_name</span><span class="k">}</span> <span class="o">&gt;</span> /dev/null 2&gt;&amp;1
+<span class="nv">result</span><span class="o">=</span><span class="nv">$?</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nv">$result</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+	</span><span class="nb">echo</span> <span class="s2">"No Container found, create new container </span><span class="k">${</span><span class="nv">container_name</span><span class="k">}</span><span class="s2">"</span>
+	
+	docker run <span class="nt">-it</span> - <span class="nt">-restart</span><span class="o">=</span>&lt;?&gt; <span class="se">\</span>
+		<span class="nt">-e</span> <span class="nv">LOCAL_USER_ID</span><span class="o">=</span><span class="sb">`</span><span class="nb">id</span> <span class="nt">-u</span> <span class="nv">$USER</span><span class="sb">`</span> <span class="se">\</span>
+		- <span class="nt">-cap-add</span><span class="o">=</span>ALL - <span class="nt">-privileged</span> <span class="se">\</span>
+		<span class="nt">-v</span> ???
+		- <span class="nt">-name</span><span class="o">=</span>&lt;prefix&gt;-<span class="nv">$USER</span> <span class="se">\</span>
+		<span class="nv">$image_name</span> /bin/bash
+<span class="k">else
+	</span>docker start <span class="k">${</span><span class="nv">containter_name</span><span class="k">}</span> <span class="o">&amp;&amp;</span> docker attach <span class="k">${</span><span class="nv">container_name</span><span class="k">}</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
 <h1 id="migration">Migration</h1>
 <ol>
   <li>
@@ -232,8 +260,7 @@ $ docker rmi $(docker images -q)
   <tbody>
     <tr>
       <td>docker rmi $(docker images</td>
-      <td>grep “^<none>"</none></td>
-      <td>awk “{print $3}”)</td>
+      <td>grep “^&lt;none&gt;” | awk “{print $3}”)</td>
     </tr>
   </tbody>
 </table>
