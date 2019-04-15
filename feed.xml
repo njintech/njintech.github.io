@@ -5,9 +5,52 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 14 Apr 2019 15:33:04 +0900</pubDate>
-    <lastBuildDate>Sun, 14 Apr 2019 15:33:04 +0900</lastBuildDate>
+    <pubDate>Mon, 15 Apr 2019 22:21:48 +0900</pubDate>
+    <lastBuildDate>Mon, 15 Apr 2019 22:21:48 +0900</lastBuildDate>
     <generator>Jekyll v3.7.2</generator>
+    
+      <item>
+        <title>Running X Window app from docker container</title>
+        <description>&lt;p&gt;Server에서 개발을 하다보면 필요한 패키지를 설치해야 하거나, 사용해보고 싶은 서비스를 설치하거나 자신에게 맞는 개발 환경을 구성하고 싶을 때가 있다. 이 때마다 관리자에게 요청을 할 수도 없고, 하더라도 거부당 할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;그래서 배포를 위해 docker를 사용하기도 하지만, 개발환경을 구성하기 위해 더 많이 사용하고 있다.&lt;/p&gt;
+
+&lt;p&gt;개인적인 기호겠지만, 서버 호스트에는 최소한의 공통 package만 설치, docker권한을 부여 후, 나머지는 customize된 환경을 사용할 수 있도록 하는 것이 서버의 안정성 및 사용성에 가장 좋은 운영 방안인 것 같다.&lt;/p&gt;
+
+&lt;p&gt;간혹 X Window GUI app을 docker에 설치해 사용해야 하는 경우가 있는데, docker container를 만들 때 지정하는 option만으로 docker container의 X window app을 host에 띄울 수 있다.&lt;br /&gt;
+단, Host에 X Window가 설치되어 있어야 한다.&lt;/p&gt;
+
+&lt;p&gt;이 예시는 Ubuntu 16.04를 기준으로 한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Host에는 X Window가 설치되어 있어야 하고,&lt;/li&gt;
+  &lt;li&gt;환경변수 &lt;strong&gt;DISPLAY&lt;/strong&gt; 가 정의돼 있어야 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;$HOME/.Xauthority file&lt;/em&gt; 이 있어야 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;--net=host&lt;/em&gt; 사용해야 한다.&lt;/li&gt;
+  &lt;li&gt;Example command line&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --rm 
+--security-opt seccomp:unconfied 
+--cap-add=ALL --privileged
+-e DISPLAY=$DISPLAY
+-v $HOME/.Xauthority:/home/user/.Xauthority:rw 
+--net=host 
+&amp;lt;image&amp;gt;
+&amp;lt;command&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;note) &lt;em&gt;--rm&lt;/em&gt; option은 image, container사이의 coherency 유지를 위해 사용한다.&lt;br /&gt;
+&lt;em&gt;--security-opt seccomp:unconfied --cap-add=ALL --privileged&lt;/em&gt; 은 &lt;strong&gt;gdb&lt;/strong&gt; 사용을 위한 option이다.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 15 Apr 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/dev/2019/04/15/docker-xwingui.html</link>
+        <guid isPermaLink="true">http://localhost:4000/dev/2019/04/15/docker-xwingui.html</guid>
+        
+        
+        <category>dev</category>
+        
+      </item>
     
       <item>
         <title>how to get bazel work behind proxy</title>
@@ -712,130 +755,6 @@ $ docker rmi $(docker images -q)
         <category>dev</category>
         
         <category>common</category>
-        
-      </item>
-    
-      <item>
-        <title>Emacs configuration</title>
-        <description>&lt;p&gt;이 포스팅은 내가 사용하는 Emacs의 기능들의 설치 및 설정 방법에 대한 기록이다.&lt;br /&gt;
-현재 사용중인 Emacs의 버전은 24.5.1이며, mac/ubuntu에서 사용중이다.&lt;br /&gt;
-따라서, mac과 ubuntu에 특화된 내용이 혼재할 수 있다.&lt;/p&gt;
-
-&lt;h1 id=&quot;proxy&quot;&gt;proxy&lt;/h1&gt;
-
-&lt;p&gt;방화벽 내부에서 MELPA를 사용하려면 proxy설정이 필요하다.&lt;br /&gt;
-init.el에 다음의 proxy설정을 추가한다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(setq url-proxy-services
-   '((&quot;no_proxy&quot; . &quot;^\\(localhost\\|10.*\\)&quot;)
-     (&quot;http&quot; . &quot;proxy.com:8080&quot;)
-     (&quot;https&quot; . &quot;proxy.com:8080&quot;)))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;no_proxy는 regex matching으로 표현된다.&lt;/p&gt;
-
-&lt;h1 id=&quot;helm-install-and-configuration&quot;&gt;helm install and configuration&lt;/h1&gt;
-
-&lt;p&gt;vim에서는 ctags, cscope조합을 사용했는데, code browser로 helm을 사용한다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;mac&lt;br /&gt;
-mac에서는 init.el의 command로 MELPA를 이용해 설치한다.&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(require 'setup-helm)
-(require 'setup-helm-gtags))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ubuntu&lt;br /&gt;&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get install elpa-helm
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;etc-settings-in-emacsdinitel&quot;&gt;etc. settings in .emacs.d/init.el&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;enable auto revert buffer&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(global-auto-revert-mode 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;file name with full path on frame&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(setq-default frame-title-format &quot;%b (%f)&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;enable menubar by default&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(menu-bar-mode t)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;control transparency&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; ;;(set-frame-parameter (selected-frame) 'alpha '(&amp;lt;active&amp;gt; . &amp;lt;inactive&amp;gt;))
- ;;(set-frame-parameter (selected-frame) 'alpha &amp;lt;both&amp;gt;)
- (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
- (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
- 
- (defun toggle-transparency ()
-   (interactive)
-   (let ((alpha (frame-parameter nil 'alpha)))
-     (set-frame-parameter
-      nil 'alpha
-      (if (eql (cond ((numberp alpha) alpha)
-                     ((numberp (cdr alpha)) (cdr alpha))
-                     ;; Also handle undocumented (&amp;lt;active&amp;gt; &amp;lt;inactive&amp;gt;) form.
-                     ((numberp (cadr alpha)) (cadr alpha)))
-               100)
-          '(85 . 50) '(100 . 100)))))
- (global-set-key (kbd &quot;C-c t&quot;) 'toggle-transparency)
- 
-  ;; Set transparency of emacs
- (defun transparency (value)
-   &quot;Sets the transparency of the frame window. 0=transparent/100=opaque&quot;
-   (interactive &quot;nTransparency Value 0 - 100 opaque:&quot;)
-   (set-frame-parameter (selected-frame) 'alpha value))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h1 id=&quot;how-to-import-user-configuration-fileel&quot;&gt;how to import user configuration file(.el)&lt;br /&gt;&lt;/h1&gt;
-&lt;p&gt;.emacs.d/init.el:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(defconst user-init-dir
-	(cond ((boundp 'user-emacs-directory)
-		   user-emacs-directory)
-		  ((boundp 'user-init-directory)
-		   user-init-directory)
-		  (t &quot;~/.emacs.d/&quot;)))
-
-(defun load-user-file (file)
-  (interactive &quot;f&quot;)
-  &quot;Load a file in current user's configuration directory&quot;
-  (load-file (expand-file-name file user-init-dir)))
-  
-(load-user-file &quot;personal.el&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;theme&quot;&gt;theme&lt;/h1&gt;
-&lt;p&gt;흰색 바탕의 심플한 theme중 괜찮은 theme&lt;br /&gt;
-&lt;a href=&quot;https://github.com/owainlewis/emacs-color-themes&quot;&gt;sublime-theme:McCarthy&lt;/a&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;M-x package-install &amp;lt;RET&amp;gt; sublime-themes
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Wed, 06 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/emacs/2017/09/06/EmacsForMe.html</link>
-        <guid isPermaLink="true">http://localhost:4000/emacs/2017/09/06/EmacsForMe.html</guid>
-        
-        
-        <category>emacs</category>
         
       </item>
     
