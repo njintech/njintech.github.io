@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>tesigners</title>
-  <meta name="description" content="">
+  <title>Emacs에서 remote host의 파일 편집하기</title>
+  <meta name="description" content="이맥스로 편집기를 갈아타기로 결정하고 난 후 여러 환경에서도 이맥스를 사용하고자 했다.(이맥스는 편집기뿐 아니라 실행, 디버깅까지 할 수 있는 통합개발환경으로 사용할 수 있고마크다운, 레이텍, 플랜트 유엠엘, 피디에프/이미지 뷰어, 깃클라이언트 등으로 사용할 수 있다.)">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/">
+  <link rel="canonical" href="http://localhost:4000/emacs/2019/06/09/emacs-remote-files.html">
   <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
@@ -54,129 +54,34 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Emacs에서 remote host의 파일 편집하기</h1>
+    <p class="post-meta"><time datetime="2019-06-09T00:00:00+09:00" itemprop="datePublished">Jun 9, 2019</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jun 9, 2019</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>이맥스로 편집기를 갈아타기로 결정하고 난 후 여러 환경에서도 이맥스를 사용하고자 했다.
+(이맥스는 편집기뿐 아니라 실행, 디버깅까지 할 수 있는 통합개발환경으로 사용할 수 있고
+마크다운, 레이텍, 플랜트 유엠엘, 피디에프/이미지 뷰어, 깃클라이언트 등으로 사용할 수 있다.)</p>
 
-        <h2>
-          <a class="post-link" href="/emacs/2019/06/09/emacs-remote-files.html">Emacs에서 remote host의 파일 편집하기</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 15, 2019</span>
+<p>수년 전 부터 회사의 개발 환경이 리눅스로 바뀌고 있었고, 요즘은 고성능 리눅스 서버에 접속해서 개발을 하고 있다.
+하지만 문서작업과 인프라는 윈도우를 사용할 수 밖에 없는 상황이어서, 개인 로컬피씨 오에스는 윈도우 일 수 밖에 없는 상황이다.</p>
 
-        <h2>
-          <a class="post-link" href="/dev/2019/04/15/docker-xwingui.html">Running X Window app from docker container</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 14, 2019</span>
+<p>이 경우 이맥스를 적용할 수 있는 시나리오는 두 가지이다.(콘솔 버전의 이맥스 사용은 배제한다.)</p>
 
-        <h2>
-          <a class="post-link" href="/tensorflow/2019/04/14/bazel-behind-proxy.html">how to get bazel work behind proxy</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 14, 2018</span>
+<p>첫째는 엑스 서버를 지원하는 터미널 프로그램으로 서버에 접속해 이맥스를 실행하는 방법이다. 서버에서 실행한 이맥스 윈도우가 로컬피씨에서 보이게 되는 것이다. 이 방법은 특별한 가이드 필요없고, 당연히 가장 쉬운 방법이다. <br />
+지금은 이 방법을 사용하고 있지만, 이 경우 서버에 엑스윈도우 데스크탑이 설치되어 있어야 한다.</p>
 
-        <h2>
-          <a class="post-link" href="/writing/2018/02/14/my-transciption.html">나만의 필사 방법</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 5, 2017</span>
+<p>두번째는 로컬호스ㅌ에서 실행시킨 이맥스에서 서버로 접속해 파일을 편집하는 방법이다. 디렉토리 뷰를 통해 서버에 접속하는 방법이다. 이맥스에서 아래의 커맨드 라인을 이용해 서버에 접근할 수 있다.</p>
 
-        <h2>
-          <a class="post-link" href="/deep-learning/2017/10/05/tensorflow-install.html">Tensorflow install</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 16, 2017</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C-x d /scp:&lt;user&gt;@&lt;host&gt;:&lt;path to dir or file&gt;
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/emacs/2017/09/16/gdb-inside-docker.html">using gdb inside docker container</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
+  </div>
 
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/10/ubuntu-ca-install.html">register Cerificates manually in ubuntu</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/10/latex-fonts.html">latex에서 한글 밎 다양한 font 사용하기</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/emacs/2017/09/10/emacs-clip-file-path.html">copying full path of current file in emacs</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 10, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/dev-common/2017/09/10/3beol-linux.html">ubuntu에서 세벌식 입력기 사용하기</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 6, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/dev/common/2017/09/06/docker-memo.html">Tips for Docker Install and Usage</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 6, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/emacs/2017/09/06/EmacsForMe.html">Emacs configuration</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 16, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/essay/2017/08/16/EssayOnDockerUsage.html">Docker 사용에 대한 단상</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 7, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/deep-learning/2017/08/07/Caffe-Install.html">Docker ubuntu 16.04에서 Caffe 설치</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
+</article>
 
       </div>
     </div>
