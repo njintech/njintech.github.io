@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>copying full path of current file in emacs</title>
-  <meta name="description" content="copy below function into .emacs.d/init.el">
+  <title>MathJax로 Jekyll blog에 수학식 표현하기</title>
+  <meta name="description" content="  _config.yml    markdown: kramdownhighlighter: rougelsi: falseexcerpt_separator: "\n\n"incremental: false      ">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/emacs/2017/09/10/emacs-clip-file-path.html">
+  <link rel="canonical" href="http://localhost:4000/2020/05/05/Jekyll-Mathjax.html">
   <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
 </head>
 
@@ -55,28 +55,117 @@
     <div class="page-content">
       <div class="wrapper">
         
+  <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+   TeX: {
+     equationNumbers: {
+       autoNumber: "AMS"
+     }
+   },
+   tex2jax: {
+     inlineMath: [ ['$', '$'] ],
+     displayMath: [ ['$$', '$$'] ],
+     processEscapes: true,
+   }
+ });
+ MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+   alert("Math Processing Error: "+message[1]);
+ });
+ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+   alert("Math Processing Error: "+message[1]);
+ });
+</script>
+<script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
 
 <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">copying full path of current file in emacs</h1>
-    <p class="post-meta"><time datetime="2017-09-10T00:00:00+09:00" itemprop="datePublished">Sep 10, 2017</time></p>
+    <h1 class="post-title" itemprop="name headline">MathJax로 Jekyll blog에 수학식 표현하기</h1>
+    <p class="post-meta"><time datetime="2020-05-05T00:00:00+09:00" itemprop="datePublished">May 5, 2020</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>copy below function into <strong>.emacs.d/init.el</strong></p>
+    <ol>
+  <li>_config.yml
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+</code></pre></div>    </div>
+  </li>
+  <li>_includes/mathjax_support.html
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script type="text/x-mathjax-config"&gt;
+ MathJax.Hub.Config({
+TeX: {
+  equationNumbers: {
+    autoNumber: "AMS"
+  }
+},
+tex2jax: {
+  inlineMath: [ ['$', '$'] ],
+  displayMath: [ ['$$', '$$'] ],
+  processEscapes: true,
+}
+ });
+ MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+alert("Math Processing Error: "+message[1]);
+ });
+ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+alert("Math Processing Error: "+message[1]);
+ });
+&lt;/script&gt;
+&lt;script type="text/javascript" async
+     src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"&gt;
+&lt;/script&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>_layouts/post.html
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ % if page.use_math % }
+  { % include mathjax_support.html % }
+{ % endif % }
+</code></pre></div>    </div>
+  </li>
+  <li>posting example
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: post
+title: "MathJax로 Jekyll blog에 수학식 표현하기"
+use_math: true
+---
+   
+Standard normal distribution: $\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}$ is an example.
+   
+$$
+\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}
+$$
+   
+$$
+E = mc^2
+$$
+   
+$$
+e^{i\pi} + 1 = 0
+$$
+   
+$$
+v(t) = v_{peak}\sin(\omega t)
+$$
+</code></pre></div>    </div>
+    <p>Standard normal distribution: $\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}$ is an example.</p>
+  </li>
+</ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(defun clip-file-path ()
-  "Copy the current buffer file name to the clipboard."
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
-</code></pre></div></div>
+<script type="math/tex; mode=display">\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}</script>
 
+<script type="math/tex; mode=display">E = mc^2</script>
+
+<script type="math/tex; mode=display">e^{i\pi} + 1 = 0</script>
+
+<script type="math/tex; mode=display">v(t) = v_{peak}\sin(\omega t)</script>
 
   </div>
 

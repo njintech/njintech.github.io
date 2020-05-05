@@ -5,9 +5,96 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Jun 2019 08:51:43 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Jun 2019 08:51:43 +0900</lastBuildDate>
+    <pubDate>Tue, 05 May 2020 09:06:17 +0900</pubDate>
+    <lastBuildDate>Tue, 05 May 2020 09:06:17 +0900</lastBuildDate>
     <generator>Jekyll v3.7.2</generator>
+    
+      <item>
+        <title>MathJax로 Jekyll blog에 수학식 표현하기</title>
+        <description>&lt;ol&gt;
+  &lt;li&gt;_config.yml
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: &quot;\n\n&quot;
+incremental: false
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;_includes/mathjax_support.html
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script type=&quot;text/x-mathjax-config&quot;&amp;gt;
+ MathJax.Hub.Config({
+TeX: {
+  equationNumbers: {
+    autoNumber: &quot;AMS&quot;
+  }
+},
+tex2jax: {
+  inlineMath: [ ['$', '$'] ],
+  displayMath: [ ['$$', '$$'] ],
+  processEscapes: true,
+}
+ });
+ MathJax.Hub.Register.MessageHook(&quot;Math Processing Error&quot;,function (message) {
+alert(&quot;Math Processing Error: &quot;+message[1]);
+ });
+ MathJax.Hub.Register.MessageHook(&quot;TeX Jax - parse error&quot;,function (message) {
+alert(&quot;Math Processing Error: &quot;+message[1]);
+ });
+&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; async
+     src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;&amp;gt;
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;_layouts/post.html
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{ % if page.use_math % }
+  { % include mathjax_support.html % }
+{ % endif % }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;posting example
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;---
+layout: post
+title: &quot;MathJax로 Jekyll blog에 수학식 표현하기&quot;
+use_math: true
+---
+   
+Standard normal distribution: $\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}$ is an example.
+   
+$$
+\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}
+$$
+   
+$$
+E = mc^2
+$$
+   
+$$
+e^{i\pi} + 1 = 0
+$$
+   
+$$
+v(t) = v_{peak}\sin(\omega t)
+$$
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;Standard normal distribution: $\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}$ is an example.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\phi(x) = \frac{1}{2\pi}\varepsilon^{\frac{-x^2}{2}}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;E = mc^2&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;e^{i\pi} + 1 = 0&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v(t) = v_{peak}\sin(\omega t)&lt;/script&gt;
+</description>
+        <pubDate>Tue, 05 May 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2020/05/05/Jekyll-Mathjax.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2020/05/05/Jekyll-Mathjax.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Emacs에서 remote host의 파일 편집하기</title>
@@ -163,11 +250,8 @@ $ jar -cvmf manifest.txt InstallCert.jar *.class
       </item>
     
       <item>
-        <title>나만의 필사 방법</title>
-        <description>&lt;p&gt;새해 목표 중 하나로 &lt;strong&gt;글 쓰기&lt;/strong&gt;를 설정하면서, &lt;strong&gt;필사&lt;/strong&gt;를 그 첫번째 수단으로 삼았다. 사실 &lt;strong&gt;필사&lt;/strong&gt; 자체도 쉽지만은 않다.&lt;br /&gt;
-내가 처음 접한 필사의 방법론은 신동진 기자의 글(https://brunch.co.kr/@eastgo/386) 이었다. 
-Top down 방식의 접근법을 제시하고 있다.
-방법을 정리해 보면 이렇다.&lt;/p&gt;
+        <title>필사 방법</title>
+        <description>&lt;p&gt;글쓰기 공부를 위한 필사 방법을 정리해 봤다.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;필사할 글은 본인이 직접 고른다.&lt;/li&gt;
@@ -539,33 +623,6 @@ docker container에서 정상적인 gdb사용을 위해서는 아래 옵션을 �
         
         
         <category>emacs</category>
-        
-      </item>
-    
-      <item>
-        <title>ubuntu에서 세벌식 입력기 사용하기</title>
-        <description>&lt;p&gt;우분투에서 세벌식 한글 입력기를 사용하기 위한 방법이다.&lt;br /&gt;
-한글 사용을 위한 ibus-hangul설치가 된 환경을 전제로 한다.&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;세벌식 자판중에서는 최종보다는 신세벌식 2012를 사용하기를 권장한다.&lt;/p&gt;
-
-&lt;h1 id=&quot;install&quot;&gt;install&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo add-apt-repository -y ppa:createsc/3beol
-$ sudo apt-get update -y
-$ sudo apt-get upgrade -y
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;remove&quot;&gt;remove&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install -y ppa-purge
-$ sudo ppa-purge ppa:createsc/3beol
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/dev-common/2017/09/10/3beol-linux.html</link>
-        <guid isPermaLink="true">http://localhost:4000/dev-common/2017/09/10/3beol-linux.html</guid>
-        
-        
-        <category>dev-common</category>
         
       </item>
     
