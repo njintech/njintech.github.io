@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>알고리즘 문제해결 Process</title>
+  <meta name="description" content="Niklaus Wirth, Program Development by Stepwise Refinement 를 참고해서, 알고리즘 문제 해결에 적용할 문제해결 Process를 정리해 본다.">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://localhost:4000/aps/2020/05/25/aps-process.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">tesigners</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+  <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+   TeX: {
+     equationNumbers: {
+       autoNumber: "AMS"
+     }
+   },
+   tex2jax: {
+     inlineMath: [ ['$', '$'] ],
+     displayMath: [ ['$$', '$$'] ],
+     processEscapes: true,
+   }
+ });
+ MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+   alert("Math Processing Error: "+message[1]);
+ });
+ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+   alert("Math Processing Error: "+message[1]);
+ });
+</script>
+<script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">알고리즘 문제해결 Process</h1>
+    <p class="post-meta"><time datetime="2020-05-25T00:00:00+09:00" itemprop="datePublished">May 25, 2020</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><em>Niklaus Wirth, Program Development by Stepwise Refinement</em> 를 참고해서, 알고리즘 문제 해결에 적용할 문제해결 Process를 정리해 본다.</p>
+
+<p>문제 해결 과정은 아래와 같이 3개 과정으로 정의할 수 있다.</p>
+
+<ol>
+  <li>
+    <p>문제 분셕 (Analysis problem)</p>
+
+    <p>문제를 분석해 문제가 무엇인지 분석하고, 특정하여 모델링 한다.</p>
+  </li>
+  <li>
+    <p>문제 모델링 및 해법 도출 (Model/Design solution)</p>
+
+    <p>특정된 문제의 해법을 모델링 한다.</p>
+  </li>
+  <li>
+    <p>해법 프로그램 (Program solution)</p>
+
+    <p>설계/해법을 수행할 수 있는 프로그램을 작성하고 검토/검증한다.</p>
+  </li>
+</ol>
+
+<p>위의 과정은 알고리즘 문제뿐 아니라, 모든 문제를 해결해 나가는 과정을 간단하게 추상화한 것이다. 이 과정을 문제해결 단계에 맞추어 적용하고 운용하는 것이 문제해결 능력 향상의 핵심이다.</p>
+
+<p>우리가 해결하고자 하는 대부분의 문제는 처음부터 구체적으 해결책을 도출하기 힘들다.
+이런 추상적인 문제는 구체화하는 과정을 거치고, 구체화된 문제를 작은 문제로 나누면 어럽지않게 문제를 해결해 나갈 수 있다. 위 기본 문제 해결 과정을 문제의 구체화, 세분화 과정에 적용해서 큰 문제를 해결할 수 있다.</p>
+
+<p>요약하자면, 모든 문제는 analytic solution을 가지고 있거나 atomic 문제가 아닌 경우, 몇개의 작은 문제로 나눌 수 있고 device and conquer로 해결해 나갈 수 있다.</p>
+
+<p>구체화, 세분화 관점에서 문제 해결 단계를 아래의 4가지 단계로 정의할 수 있다.</p>
+
+<ol>
+  <li>
+    <p>Problem analysis phase</p>
+
+    <p><strong>solution type을 분석해서 기본 해법 pseudo code를 만든다.</strong></p>
+
+    <p>문제에서 주어진 조건들과 구하고자 하는 답 사이의 관계를 분석하면 기본적인 접근방법을 설정할 수 있다.</p>
+
+    <p>예를 들어 문제에서 주어진 조건과 구하고자 하는 답 사이에 analytic solution이 존재한다면, 그 해법 알고리즘을 구현한다.
+ 반면, analytic solution이 존재하지 않는다면, 문제 공간에서 trial and error 정책으로 문제해결에 접근해야 한다.</p>
+
+    <p>따라서, 이 단계에서는 문제에서 주어진 조건과 답 사이의 관계에 초점을 두고 문제 분석을 진행해, 기본적인 접근방법을 정의하고 그 접근 방법을 pseudo code형태를 정의한다.</p>
+
+    <p>이 단계에서는 solution type과 그 psudo code 패턴을 알고 있어야 한다.</p>
+  </li>
+  <li>
+    <p>Architecture decision phase</p>
+
+    <p>1번 과정에서 도출한 해법은 주어진 문제 해결에만 집중한 결과물로 대부분 시간에 대한 성능을 고려되지 않는다. 물론 경험이 쌓이면, 한 번의 시도로 성능까지 고려한 해법을 도출할 수도 있을 것이다.</p>
+
+    <p>이 과정에서는, 기본 해법코드의 성능을 문제로 정의한다. 성능은 O() notation을 이용한 complexity로 분석한다.</p>
+
+    <p>pseudo code의 temporal/spatial complexity를 분석하고 개선할 수 있는 design decision을 내린다. design decision을 반영해 pseudo code를 개선하고, 목표로하는 성능에 도달할때까지 이 과정을 반복한다.</p>
+
+    <p>이 단계에서는 주어진 문제에 대한 해답을, 주어진 시간/공간 제한내에 해결할 수 있는 기본 틀을 결정하는 것이다. 주어진 시간/공간이라는 <strong>문제</strong>를 해결하는 단계인 것이다.</p>
+
+    <p>이 단계에서는 여러 패턴의 코드를 대상으로 complexity를 분석할 수 있는 능력과 그 개선책에 대한 많은 아이디어를 도출할 수 있는 능력이 요구된다.</p>
+  </li>
+  <li>
+    <p>Elaboration phase</p>
+
+    <p>이 단계에 이르면, 문제 해결의 틀(architecture)은 정해진다.</p>
+
+    <p>이 단계에서는 도출된 문제 해결 프로그램 중 상세화가 필요한 activity를 찾아 자세하게 기술하는 단계이다.</p>
+
+    <p>이 과정을 통해 세부 동작 및 attribute 등을 도출한다.</p>
+  </li>
+  <li>
+    <p>Coding phase</p>
+
+    <p>상세화수준이 code로 포현할 수 밖에 없게될 때 coding phase로 넘어간다.</p>
+  </li>
+</ol>
+
+<p>모든 문제에 이 방법으로 접근한다면, 태산같은 문제를 만났을때 망연자실하고 있지만은 않을 것 같다.</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">tesigners</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>tesigners</li>
+          <li><a href="mailto:njintech@gmail.com">njintech@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/tesigners"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">tesigners</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/n_jintech"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">n_jintech</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

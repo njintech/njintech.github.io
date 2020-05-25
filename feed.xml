@@ -5,9 +5,97 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 05 May 2020 21:14:02 +0900</pubDate>
-    <lastBuildDate>Tue, 05 May 2020 21:14:02 +0900</lastBuildDate>
+    <pubDate>Mon, 25 May 2020 21:45:11 +0900</pubDate>
+    <lastBuildDate>Mon, 25 May 2020 21:45:11 +0900</lastBuildDate>
     <generator>Jekyll v3.7.2</generator>
+    
+      <item>
+        <title>알고리즘 문제해결 Process</title>
+        <description>&lt;p&gt;&lt;em&gt;Niklaus Wirth, Program Development by Stepwise Refinement&lt;/em&gt; 를 참고해서, 알고리즘 문제 해결에 적용할 문제해결 Process를 정리해 본다.&lt;/p&gt;
+
+&lt;p&gt;문제 해결 과정은 아래와 같이 3개 과정으로 정의할 수 있다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;문제 분셕 (Analysis problem)&lt;/p&gt;
+
+    &lt;p&gt;문제를 분석해 문제가 무엇인지 분석하고, 특정하여 모델링 한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;문제 모델링 및 해법 도출 (Model/Design solution)&lt;/p&gt;
+
+    &lt;p&gt;특정된 문제의 해법을 모델링 한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;해법 프로그램 (Program solution)&lt;/p&gt;
+
+    &lt;p&gt;설계/해법을 수행할 수 있는 프로그램을 작성하고 검토/검증한다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;위의 과정은 알고리즘 문제뿐 아니라, 모든 문제를 해결해 나가는 과정을 간단하게 추상화한 것이다. 이 과정을 문제해결 단계에 맞추어 적용하고 운용하는 것이 문제해결 능력 향상의 핵심이다.&lt;/p&gt;
+
+&lt;p&gt;우리가 해결하고자 하는 대부분의 문제는 처음부터 구체적으 해결책을 도출하기 힘들다.
+이런 추상적인 문제는 구체화하는 과정을 거치고, 구체화된 문제를 작은 문제로 나누면 어럽지않게 문제를 해결해 나갈 수 있다. 위 기본 문제 해결 과정을 문제의 구체화, 세분화 과정에 적용해서 큰 문제를 해결할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;요약하자면, 모든 문제는 analytic solution을 가지고 있거나 atomic 문제가 아닌 경우, 몇개의 작은 문제로 나눌 수 있고 device and conquer로 해결해 나갈 수 있다.&lt;/p&gt;
+
+&lt;p&gt;구체화, 세분화 관점에서 문제 해결 단계를 아래의 4가지 단계로 정의할 수 있다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Problem analysis phase&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;solution type을 분석해서 기본 해법 pseudo code를 만든다.&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;문제에서 주어진 조건들과 구하고자 하는 답 사이의 관계를 분석하면 기본적인 접근방법을 설정할 수 있다.&lt;/p&gt;
+
+    &lt;p&gt;예를 들어 문제에서 주어진 조건과 구하고자 하는 답 사이에 analytic solution이 존재한다면, 그 해법 알고리즘을 구현한다.
+ 반면, analytic solution이 존재하지 않는다면, 문제 공간에서 trial and error 정책으로 문제해결에 접근해야 한다.&lt;/p&gt;
+
+    &lt;p&gt;따라서, 이 단계에서는 문제에서 주어진 조건과 답 사이의 관계에 초점을 두고 문제 분석을 진행해, 기본적인 접근방법을 정의하고 그 접근 방법을 pseudo code형태를 정의한다.&lt;/p&gt;
+
+    &lt;p&gt;이 단계에서는 solution type과 그 psudo code 패턴을 알고 있어야 한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Architecture decision phase&lt;/p&gt;
+
+    &lt;p&gt;1번 과정에서 도출한 해법은 주어진 문제 해결에만 집중한 결과물로 대부분 시간에 대한 성능을 고려되지 않는다. 물론 경험이 쌓이면, 한 번의 시도로 성능까지 고려한 해법을 도출할 수도 있을 것이다.&lt;/p&gt;
+
+    &lt;p&gt;이 과정에서는, 기본 해법코드의 성능을 문제로 정의한다. 성능은 O() notation을 이용한 complexity로 분석한다.&lt;/p&gt;
+
+    &lt;p&gt;pseudo code의 temporal/spatial complexity를 분석하고 개선할 수 있는 design decision을 내린다. design decision을 반영해 pseudo code를 개선하고, 목표로하는 성능에 도달할때까지 이 과정을 반복한다.&lt;/p&gt;
+
+    &lt;p&gt;이 단계에서는 주어진 문제에 대한 해답을, 주어진 시간/공간 제한내에 해결할 수 있는 기본 틀을 결정하는 것이다. 주어진 시간/공간이라는 &lt;strong&gt;문제&lt;/strong&gt;를 해결하는 단계인 것이다.&lt;/p&gt;
+
+    &lt;p&gt;이 단계에서는 여러 패턴의 코드를 대상으로 complexity를 분석할 수 있는 능력과 그 개선책에 대한 많은 아이디어를 도출할 수 있는 능력이 요구된다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Elaboration phase&lt;/p&gt;
+
+    &lt;p&gt;이 단계에 이르면, 문제 해결의 틀(architecture)은 정해진다.&lt;/p&gt;
+
+    &lt;p&gt;이 단계에서는 도출된 문제 해결 프로그램 중 상세화가 필요한 activity를 찾아 자세하게 기술하는 단계이다.&lt;/p&gt;
+
+    &lt;p&gt;이 과정을 통해 세부 동작 및 attribute 등을 도출한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Coding phase&lt;/p&gt;
+
+    &lt;p&gt;상세화수준이 code로 포현할 수 밖에 없게될 때 coding phase로 넘어간다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;모든 문제에 이 방법으로 접근한다면, 태산같은 문제를 만났을때 망연자실하고 있지만은 않을 것 같다.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 25 May 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/aps/2020/05/25/aps-process.html</link>
+        <guid isPermaLink="true">http://localhost:4000/aps/2020/05/25/aps-process.html</guid>
+        
+        
+        <category>aps</category>
+        
+      </item>
     
       <item>
         <title>MathJax로 Jekyll blog에 수학식 표현하기</title>
@@ -598,31 +686,6 @@ docker container에서 정상적인 gdb사용을 위해서는 아래 옵션을 �
         
         
         <category>dev-common</category>
-        
-      </item>
-    
-      <item>
-        <title>copying full path of current file in emacs</title>
-        <description>&lt;p&gt;copy below function into &lt;strong&gt;.emacs.d/init.el&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(defun clip-file-path ()
-  &quot;Copy the current buffer file name to the clipboard.&quot;
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message &quot;Copied buffer file name '%s' to the clipboard.&quot; filename))))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/emacs/2017/09/10/emacs-clip-file-path.html</link>
-        <guid isPermaLink="true">http://localhost:4000/emacs/2017/09/10/emacs-clip-file-path.html</guid>
-        
-        
-        <category>emacs</category>
         
       </item>
     
