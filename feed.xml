@@ -5,9 +5,123 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 25 May 2020 21:45:11 +0900</pubDate>
-    <lastBuildDate>Mon, 25 May 2020 21:45:11 +0900</lastBuildDate>
+    <pubDate>Tue, 26 May 2020 21:49:37 +0900</pubDate>
+    <lastBuildDate>Tue, 26 May 2020 21:49:37 +0900</lastBuildDate>
     <generator>Jekyll v3.7.2</generator>
+    
+      <item>
+        <title>stepwise refinement - 프로그램 모델링 기법</title>
+        <description>&lt;p&gt;&lt;em&gt;Niklaus Wirth, Program Development by Stepwise Refinement&lt;/em&gt; 에서 제시한 solution model 기법 몇가지를 정리한다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;model for &lt;strong&gt;Trial and error solution type&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;해법 유형(solution type)이 아래와 같을 때에는&lt;/p&gt;
+
+    &lt;p&gt;$solution= x \in A \cap p(x)$&lt;/p&gt;
+
+    &lt;p&gt;다음의 프로그램 모델을 적용해 해법을 도출할 수 있다.&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  do
+     x = generate_next_cand(A)
+  while p(x) or (no more elements in A) 
+     
+  if p(x)
+      solution = x; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;strategy of preselection&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;전체 문제 공간이 너무 큰 경우, 부분 조건을 선택해 선제적으로 문제 공간을 줄일 수 있다.&lt;/p&gt;
+
+    &lt;p&gt;1번 항목의 전체 문제 공간 $p(x)$ 를 다음과 같이 표현할 수 있을 때&lt;/p&gt;
+
+    &lt;p&gt;$p = q \cap r$&lt;/p&gt;
+
+    &lt;p&gt;$r(x)$ 조건을 전체 문제공간에 선제적으로 적용함으로써 문제공간을 $q(x)$로 줄일 수 있다.&lt;/p&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;B_r = {x | (x \in A) \wedge r(x)}&lt;/script&gt;
+
+    &lt;p&gt;이 때, 조건 $r$ 은 다음과 같아야 한다.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;$B_r$ is much smaller than $A$&lt;/li&gt;
+      &lt;li&gt;elements of $B_r$ are easily generated&lt;/li&gt;
+      &lt;li&gt;condition $q$ is easier to test than $p$.&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;이 때, 프로그램 모델을 다음과 같다.&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; do 
+    x = generate_next_candidate(Br)
+ while q(x) || empty(Br)
+
+ if q(r)
+    solution = x
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;model for &lt;strong&gt;back tracking&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;2번의 과정으로 문제공간을 줄였음에도 불구하고, 특정 유형의 해답의 경우, 명백하게 오답인 것을 알고도 해당 문제공간을 탐색하게 된다. 명백한 오류 공간을 탐색하지 않음으로써, 문제공간을 줄일 수가 있다.&lt;/p&gt;
+
+    &lt;p&gt;이 문제를 해결하는 프로그램 모델이 back tracking이다.&lt;/p&gt;
+
+    &lt;p&gt;위에서 말한 특정 유형이란, 해답(solution)이 stepwise construction이 가능한 경우를 말한다. 이를 판단하는 기준은 아래와 같다.&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; find representation of a trial solution
+    
+   trial solution = [x1], [x1, x2], .... [x1, x2, ... xj], ..., [x1, x2, ... xn]
+
+   1. full solution can never be obtained by extending a partial trial solution which does not satisfy the predicate.
+   2. partial solution satisfying predicate q may not extensible into a complete solution
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;위의 판단 기준에 따라 partial solution을 modeling하면, 다음과 같은 back tracking 프로그램 모델을 적용할 수 있다.&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; j = 1
+ do 
+   result = try_step(j)
+   if result == successful
+     advance(j + 1)
+     else
+     regress(j - 1)
+ while (j &amp;lt; 1) || (j &amp;gt; n)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;note) 여기서 주의해야 할 점은 step j 을 지정해서 trial solution을 지정할 수 있어야 한다. step에 따라 동일한 trial solution을 만들 수 없으면, regression을 할 수가 없다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;data strcture 정의시 유의사항&lt;/p&gt;
+
+    &lt;p&gt;아래는 해당 논문에서 data structure 결정시 유의할 점에 대한 부분을 발췌한 것이다.&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;determine data which is key to the solution and how to express them for algorithm use&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;blockquote&gt;
+      &lt;ul&gt;
+        &lt;li&gt;the success of an algorithm depends almost always on suitable choice of its data representation &lt;strong&gt;in the light of the ease in which this representation allows the necessary operations to be expressed&lt;/strong&gt;.&lt;/li&gt;
+        &lt;li&gt;consideration regarding storage requirements may be of prime importance&lt;/li&gt;
+        &lt;li&gt;In general, it is advisable to delay decisions about data representation as long as possible&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;위에 정리한 solution type 이외의 유형도 분석해, 이에 적용할 수 있는 프로그램 모델을 추가 조사해야 한다.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 26 May 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/aps/2020/05/26/solution-model.html</link>
+        <guid isPermaLink="true">http://localhost:4000/aps/2020/05/26/solution-model.html</guid>
+        
+        
+        <category>aps</category>
+        
+      </item>
     
       <item>
         <title>알고리즘 문제해결 Process</title>
@@ -654,35 +768,6 @@ docker container에서 정상적인 gdb사용을 위해서는 아래 옵션을 �
         <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/dev-common/2017/09/10/ubuntu-ca-install.html</link>
         <guid isPermaLink="true">http://localhost:4000/dev-common/2017/09/10/ubuntu-ca-install.html</guid>
-        
-        
-        <category>dev-common</category>
-        
-      </item>
-    
-      <item>
-        <title>latex에서 한글 밎 다양한 font 사용하기</title>
-        <description>&lt;p&gt;latex 기본 폰트는 읽을때 심적으로 부담을 가지게 한다. 적어도 나에게는 그렇다. 텍스트만으로 가득한 문서에나 어울릴 것 같은 폰트 같이 느껴진다. 그래서, latex으로 만들 문서를 좀더 읽기 편하게 만들어 주기 위한 폰트를 사용할 수 있는 방법을 다음과 같이 기록해 둔다.&lt;/p&gt;
-
-&lt;h1 id=&quot;install-extra-font&quot;&gt;install extra font&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install texlive-fonts-extra```
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;type-in-korean&quot;&gt;type in Korean&lt;/h1&gt;
-
-&lt;p&gt;Latex 문서는 가능하면 영어로만 작성하려고 하지만, 문서의 목적 상 한글을 사용할 수 밖에 없는 경우도 많다.
-아래는 Latex에서 한글 입력이 가능하도록 하는 방법이다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install ko.tex
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;다음 구문을 latex문서에 삽입하면 한글을 사용할 수 있다.&lt;br /&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\usepackage{kotex}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/dev-common/2017/09/10/latex-fonts.html</link>
-        <guid isPermaLink="true">http://localhost:4000/dev-common/2017/09/10/latex-fonts.html</guid>
         
         
         <category>dev-common</category>
