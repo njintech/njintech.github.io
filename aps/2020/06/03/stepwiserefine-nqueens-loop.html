@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>StepwiseRefine(3) - N Queens by loop</title>
+  <meta name="description" content="Niklaus Wirth, Program Development by Stepwise Refinement의 예제인 8-Queens 문제를 알고리즘 문제해결 process에서 정리한 방법을 따라 풀어가는 과정을 정리한다.">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://localhost:4000/aps/2020/06/03/stepwiserefine-nqueens-loop.html">
+  <link rel="alternate" type="application/rss+xml" title="tesigners" href="http://localhost:4000/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">tesigners</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+  <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+   TeX: {
+     equationNumbers: {
+       autoNumber: "AMS"
+     }
+   },
+   tex2jax: {
+     inlineMath: [ ['$', '$'] ],
+     displayMath: [ ['$$', '$$'] ],
+     processEscapes: true,
+   }
+ });
+ MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+   alert("Math Processing Error: "+message[1]);
+ });
+ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+   alert("Math Processing Error: "+message[1]);
+ });
+</script>
+<script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">StepwiseRefine(3) - N Queens by loop</h1>
+    <p class="post-meta"><time datetime="2020-06-03T00:00:00+09:00" itemprop="datePublished">Jun 3, 2020</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><em>Niklaus Wirth, Program Development by Stepwise Refinement</em>의 예제인 8-Queens 문제를 <a href="/aps/2020/05/25/aps-process.html">알고리즘 문제해결 process</a>에서 정리한 방법을 따라 풀어가는 과정을 정리한다.</p>
+
+<ol>
+  <li>
+    <p>Problem</p>
+
+    <p>Given are an 8x8 chessboard and 8 queens which are hostile to each other.</p>
+
+    <p>Find a position for each queen (a configuration) such that no queen may be taken by any other queen.</p>
+
+    <p>(i.e. such that every row, column and diagonal contains at most one queen)</p>
+  </li>
+  <li>
+    <p><strong>Problem analysis phase</strong></p>
+
+    <ol>
+      <li>
+        <p>analysis problem</p>
+
+        <p>condition $p$ : every row, column and diagonal contains at most one queen</p>
+
+        <p>8x8 chess판에서 condition $p$ 를 만족하는 8개의 위치를 찾는 것이 문제이다.</p>
+      </li>
+      <li>
+        <p>model/design solution</p>
+
+        <p>solution $x$ 는 다음과 같이 표현할 수 있다.</p>
+
+        <p><script type="math/tex">x = 8 \ locs \in \{A \cap p(x)\}</script>
+ <script type="math/tex">where\ loc = (row, col)</script></p>
+
+        <script type="math/tex; mode=display">where\ A=all\ position\ of\ chess, 8 \times 8</script>
+
+        <p>analytic solution이 존재하지 않는 문제로, trial error방법으로 답을 찾아가야 한다.</p>
+      </li>
+      <li>
+        <p>program solution</p>
+
+        <p>trial and error 전략으로 문제를 해결하는  pseudo code는 다음과 같다. 문제 공간은 모든 경우의 수가 되고, 이를 검색하고 조건을 확인해 답을 구하게 된다.</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> do
+     x = generate_next_cand(A)
+ while p(x) or (no more elements in A) 
+     
+ if p(x)
+       solution = x; 
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p><strong>Architecture decision phase-1</strong></p>
+
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>초기 구현의 complexity를 분석해보면</p>
+
+        <p><script type="math/tex">complexity = _{64}\mathrm{C}_{8} = \frac{64!}{56! \times 8!} \approx 2^{32}</script>
+ 로 제한 시간 1sec을 만족하지 못 한다.</p>
+
+        <p>note) 제한시간 1sec은 대략 complexity $10^9$ 정도 이다.</p>
+      </li>
+      <li>
+        <p>model/design solution</p>
+
+        <p>초기 구현은 모든 경우의 수를 탐색하는 방법으로 불필요한 경우의 수까지 탐색하고 있다.</p>
+
+        <p>이 경우, 불필요한 문제영역을 제거함으로써, 그 공간을 줄이는 방법을 적용해 성능을 제고할 수 있다.</p>
+
+        <p>문제 공간을 줄이는 방법으로 <strong>strategy of preselection</strong>을 적용해볼 수 있다.</p>
+
+        <p>$p = q \cap r$ 인 $q$ 와 $r$ 을 다음과 같이 정의할 수 있다.</p>
+
+        <ul>
+          <li>$r$ : in every column, there must be one queen</li>
+          <li>&lt;a name=“condition-q”&gt; $q$ : in every row and diagonal, there must be one queen</li>
+        </ul>
+
+        <p>이 때, preselected set은 다음과 같이 정의된다.</p>
+
+        <script type="math/tex; mode=display">B_r = \{x | (x \in A) \wedge r(x)\}</script>
+      </li>
+      <li>
+        <p><a name="aph1-program-solution">program solution</a></p>
+
+        <p>문제 공간만 줄어들 뿐, trial and error와 동일하다.</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>do 
+    x = generate_next_candidate(Br)
+while q(x) || empty(Br)
+
+if q(r)
+    solution = x
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p><strong>Architecture decision phase 2</strong></p>
+
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p><a href="#aph1-program-solution">두 번째 solution</a>의 complexity분석은 다음과 같다.</p>
+
+        <ul>
+          <li>
+            <p>$B_r$ 의 크기(complexity)는 condition $r$ 의 정의에 따라, 8개 각 column별 8개의 row가 가능한 조합이므로</p>
+
+            <script type="math/tex; mode=display">8^8 = (2 ^ 3)^8 = 2^{24}</script>
+          </li>
+        </ul>
+
+        <p>이 된다.</p>
+
+        <p>하지만, 명백히 성립되지 않는 조합에 대해서도 $q(x)$ check를 수행하고 있다. 예를 들어 $x = x[0], x[1], x[2], …, x[7]$ 이라고 했을 때, $x[1]$ 이 $q(x)$ 를 만족하지 못하면, $x[2], …, x[7]$ 는 명백하게 해답이 될 수 없음에도 탐색을 하게 된다.</p>
+
+        <p>이 점을 문제로 정의할 수 있다.</p>
+      </li>
+      <li>
+        <p>model/design solution</p>
+
+        <p>8 queens solution은</p>
+
+        <ul>
+          <li>${x1, x2, …, x8}$ 의 형식으로 ${x1, …, xj}$ 의 <em>trial solution</em>을 만들 수 있고</li>
+          <li><em>trial solution</em>이 실패하면, 해당 <em>trial solution</em>의 extension도 fail하게 된다.</li>
+        </ul>
+
+        <p>즉, back tracking 적용이 가능한 solution type이다. <a href="/aps/2020/05/26/solution-model.html">참조</a></p>
+
+        <p>back tracking template code는 다음과 같다.</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> j = 1
+ do 
+     result = try_step(j)
+     if result == successful
+        advance(j + 1)
+     else
+        regress(j - 1)
+ while (j &lt; 1) || (j &gt; n)
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>program solution</p>
+
+        <p>back tracking code template을 도입한 첫번째 solution code는 다음과 같다.</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> board
+ pointer
+ safe
+
+ consider_first_column()
+
+ while not last_col_done and not regress_outof_firstcol
+     safe = trycolumn()
+            
+     if safe
+         set_queen()
+         consider_next_column()
+    else
+         regress()
+
+ if last_step_done()
+     print(board)
+ else
+     print("failed")
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Elaboration phase 0</strong>
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>backtracking의 핵심인 trystep()과  regress()를 상세화 한다.</p>
+
+        <p>이 때, stepwise construction이 가능해야 한다는 것을 염두에 두어야 한다.</p>
+      </li>
+      <li>model/design solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> trystep(step) {
+     while not(safe) and not(last_square)
+         safe = test_square(step, pointer)
+         advance_pointer()
+              
+     return safe
+ }
+      
+ regress(step, pointer) {
+     reconsider_prior_step()
+            
+     if not(regress_outof_firststep)
+         removequeen()
+                        
+     // 하나의 row에 하나의 퀸만 가능하므로, regress한 위치가 마지막 row이면, 
+     // 다시 시도해도 safe가 없을것이 자명하므로 한 step더 뒤로 돌아간다.
+     // 확인해봐야 함.
+            
+     if last_square()
+         reconsider_prior_column()
+         if not(regres_outof_firststep())
+             removequeen()                        
+ }
+      
+ main() {
+     board: let 8x8 array
+     pointer: let array of 1x8
+     safe: variable
+            
+     consider_first_step()
+     while not last_col_done and  not regress_outof_firststep
+         if trystep() == safe
+             set_queen()
+             consider_next_step()
+         else
+             regress()
+                
+     if last_col_done
+         print(x)
+     else
+         print('fail')
+ }
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Coding phase 0</strong>
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>elaboration의 수준이 code로 포현할 수 밖에 없게될 때 coding phase로 넘어간다.</p>
+
+        <p>이 단계에서는 다음과 같은 상세화를 진행한다.</p>
+
+        <p>data structure를 정의할 때 유의할 점은 <a href="/aps/2020/05/26/solution-model.html">여기</a>를 참고한다.</p>
+
+        <ul>
+          <li>data structure 정의</li>
+          <li>간단한 변수의 데이터 타입정의 및 관련 method 상세화</li>
+          <li>step과 pointer 정의</li>
+        </ul>
+      </li>
+      <li>model/design solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> board
+ int step (0 &lt;= step &lt;= 9)
+ int pointer[1:8] 
+        
+ consider_first_column() {
+     step = 1
+     pointer[1] = 0
+ }
+        
+ consider_next_step(step) {
+     step = step + 1
+     pointer[step] = 0
+ }
+        
+ advance_pointer(step) {
+     pointer[step] += 1
+ }
+        
+ reconsider_prior_step(step) {
+     step = step - 1
+ }
+        
+ regress_outof_firststep(step) {
+     return step &lt; 1
+ }
+        
+ last_step_done(step) {
+     return step &gt; 8
+ }
+          
+ last_square(step) {
+     return pointer[step] &gt; 8
+ }
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Coding phase 1</strong>
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>상세화되지 않는 function중 <em>test_square()</em>는 가장 자주 불리는 함수고, 가장 비싼 함수다. 따라서, 이 함수가 성능을 좌우하게 된다.</p>
+
+        <p>각 column의 8개의 row를 loop으로 검사할 수도 있지만, 조사할 조건의 특성, 주어진 문제의 특징을 이용해 자료구조를 정의하면 간단한 연산 한번으로 조사를 할 수 있다.</p>
+
+        <p>다음과 같이 주어진 조건 <a href="#condition-q">q(x)</a>와 좌표 특성을 이용하여      자료구조를 정의한다.</p>
+
+        <ul>
+          <li>같은 /-diagonal에 위치한 %loc(row, col)%는 %val = row + col%이 같은 값을 가진다.</li>
+          <li>같은 -diagoal에 위치한 %loc(row, col)%은 %val = row - col%이 같은 값을 가진다.</li>
+        </ul>
+
+        <p>자료구조는 다음과 같이 정의할 수 있다.</p>
+
+        <ul>
+          <li>a[1:8] = true: no queen is positioned in row</li>
+          <li>b[2:16] = true: no queen is positioned in the /-diagonal</li>
+          <li>c[-7:7] = true: no queen is positioned in the -diagonal</li>
+        </ul>
+      </li>
+      <li>model/design solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> test_square(step, pointer) {
+     safe = a[pointer] or b[step + pointer] or c[step - pointer]
+     return safe
+ }
+                
+ set_queen(step, pointer) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+    
+ remove_queen(step) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Coding phase 2</strong>
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>상세화된 결과를 모두 합친 entire code 도출한다.</p>
+      </li>
+      <li>model/design Solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> int step (0 &lt;= step &lt;= 9)
+ int pointer[1:8] 
+ a[1:8] = true: no queen is positioned in row
+ b[2:16] = true: no queen is positioned in the /-diagonal
+ c[-7:7] = true: no queen is positioned in the \-diagonal
+        
+ consider_first_column() {
+     step = 1
+     pointer[1] = 0
+ }
+    
+ consider_next_step(step) {
+     step = step + 1
+     pointer[step] = 0
+ }
+    
+ advance_pointer(step) {
+     pointer[step] += 1
+ }
+    
+ reconsider_prior_step(step) {
+     step = step - 1
+ }
+    
+ regress_outof_firststep(step) {
+     return step &lt; 1
+ }
+    
+ last_step_done(step) {
+     return step &gt; 8
+ }
+    
+ last_square(step) {
+     return pointer[step] &gt; 8
+ }
+    
+ test_square(step, pointer) {
+     safe = a[pointer] or b[step + pointer] or c[step - pointer]
+     return safe
+ }
+            
+ set_queen(step, pointer) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+            
+ remove_queen(step) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+
+ main() {
+     board: let 8x8 array
+     pointer: let array of 1x8
+     safe: variable
+            
+     consider_first_step()
+            
+     while last_col_done or regress_outof_firststep {
+         if trystep() == safe
+             set_queen()
+             consider_next_step()
+         else
+             regress()
+     }
+                
+     if last_col_done
+         print(x)
+     else
+         print('fail')
+ }
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Implementation 1</strong>
+    <ol>
+      <li>analysis</li>
+      <li>model/design solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #include &lt;iostream&gt;
+ using namespace std;
+        
+ int step = 1;
+ int row = 0;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(void)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square()
+ {
+     return pointer[step] &gt; 8;
+ }
+        
+ void regress(void)
+ {
+     step -= 1;
+            
+     if (step &gt;= 1) {
+         remove_queen();
+                
+         if (last_square()) {
+             step -= 1;
+                    
+             if (step &gt;= 1) remove_queen();
+         }
+     }
+ }
+        
+ int main(void)
+ {
+     /*
+      * try step
+      */
+     while ((step &lt;= 8) &amp;&amp; (step &gt;= 1)) {
+         int safe = 0;
+                
+         while (!safe &amp;&amp; (row != 8)) {
+             row += 1;
+                    
+             safe = test_square(row);
+         }
+                
+         if (safe) {
+             set_queen(row);
+                    
+             pointer[step] = row;
+                    
+             step += 1;
+             row = 0;
+         }
+         else {
+             regress();
+             row = pointer[step];
+         }
+     }
+            
+     if (step &gt; 8) {
+         cout &lt;&lt; endl;
+         for (int i = 1; i &lt; 9; ++i) {
+             cout &lt;&lt; pointer[i] &lt;&lt; " " &lt;&lt; endl;
+         }
+     }
+     else cout &lt;&lt; "Failed" &lt;&lt; endl;
+            
+     return 0;
+ }
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Implementation 2</strong>
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>global variable인 <em>step</em>을 parameter전달로 local variable로 만든다.</p>
+      </li>
+      <li>model/design solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #include &lt;iostream&gt;
+ using namespace std;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int step, int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int step, int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(int step)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square(int step)
+ {
+     return pointer[step] &gt; 8;
+ }
+        
+ int regress(int step)
+ {
+     step -= 1;
+            
+     if (step &gt;= 1) {
+         remove_queen(step);
+                
+         if (last_square(step)) {
+             step -= 1;
+                    
+             if (step &gt;= 1) remove_queen(step);
+         }
+     }
+            
+     return step;
+ }
+        
+ int main(void)
+ {
+     int row = 0;
+     int step = 1;
+            
+     /*
+      * try step
+      */
+     while ((step &lt;= 8) &amp;&amp; (step &gt;= 1)) {
+         int safe = 0;
+                
+         while (!safe &amp;&amp; (row != 8)) {
+             row += 1;
+                    
+             safe = test_square(step, row);
+         }
+                
+         if (safe) {
+             set_queen(step, row);
+                    
+             pointer[step] = row;
+                    
+             step += 1;
+             row = 0;
+         }
+         else {
+             step = regress(step);
+             row = pointer[step];
+         }
+     }
+            
+     if (step &gt; 8) {
+         cout &lt;&lt; endl;
+         for (int i = 1; i &lt; 9; ++i) {
+             cout &lt;&lt; i &lt;&lt; ": " &lt;&lt; pointer[i] &lt;&lt; " " &lt;&lt; endl;
+         }
+     }
+     else cout &lt;&lt; "Failed" &lt;&lt; endl;
+            
+     return 0;
+ }
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Post mortem</strong>
+    <ol>
+      <li>
+        <p>analysis</p>
+
+        <p>지금까지의 solution은 조건을 만족하는 첫 번째 한개의 답만 찾았다.</p>
+
+        <p>조건을 만족하는 모든 조합을 찾는 general solution을 도출해 본다.</p>
+      </li>
+      <li>model/design solution</li>
+      <li>
+        <p>program solution</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #include &lt;iostream&gt;
+ using namespace std;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int step, int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int step, int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(int step)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square(int step)
+ {
+     return pointer[step] &gt; 8;
+ }
+        
+ int regress(int step)
+ {
+     step -= 1;
+            
+     if (step &gt;= 1) {
+         remove_queen(step);
+                
+         if (last_square(step)) {
+             step -= 1;
+                    
+             if (step &gt;= 1) remove_queen(step);
+         }
+     }
+            
+     return step;
+ }
+        
+ int main(void)
+ {
+     int row = 0;
+     int step = 1;
+        
+     int solCount = 0;
+        
+     /*
+      * try step
+      */
+     while (step &gt;= 1) {
+         int safe = 0;
+                
+         while (!safe &amp;&amp; (row != 8)) {
+             row += 1;
+                    
+             safe = test_square(step, row);
+         }
+                
+         if (safe) {
+             set_queen(step, row);
+                    
+             pointer[step] = row;
+                    
+             step += 1;
+             row = 0;
+        
+             if (step &gt; 8) {
+                 solCount += 1;
+        
+                 for (int i = 1; i &lt; 9; ++i) {
+                     cout &lt;&lt; pointer[i] &lt;&lt; " ";
+                 }
+                 cout &lt;&lt; endl;
+        
+                 step = regress(step);
+                 row = pointer[step];
+             }
+         }
+         else {
+             step = regress(step);
+             row = pointer[step];
+         }
+     }
+        
+     cout &lt;&lt; "Total solutions: " &lt;&lt; solCount &lt;&lt; endl;
+     return 0;
+ }
+        
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">tesigners</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>tesigners</li>
+          <li><a href="mailto:njintech@gmail.com">njintech@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/tesigners"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">tesigners</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/n_jintech"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">n_jintech</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

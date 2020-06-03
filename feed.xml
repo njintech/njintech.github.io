@@ -5,12 +5,1012 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 26 May 2020 21:49:37 +0900</pubDate>
-    <lastBuildDate>Tue, 26 May 2020 21:49:37 +0900</lastBuildDate>
+    <pubDate>Wed, 03 Jun 2020 21:09:53 +0900</pubDate>
+    <lastBuildDate>Wed, 03 Jun 2020 21:09:53 +0900</lastBuildDate>
     <generator>Jekyll v3.7.2</generator>
     
       <item>
-        <title>stepwise refinement - 프로그램 모델링 기법</title>
+        <title>StepwiseRefine(4) - N Queens by recursion</title>
+        <description>&lt;p&gt;&lt;em&gt;Niklaus Wirth, Program Development by Stepwise Refinement&lt;/em&gt;의 예제인 8-Queens 문제를 &lt;a href=&quot;/aps/2020/05/25/aps-process.html&quot;&gt;알고리즘 문제해결 process&lt;/a&gt;에서 정리한 방법을 따라 풀어가는 과정을 정리한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/aps/2020/06/03/stepwiserefine-nqueens-loop.html&quot;&gt;loop을 통한 구현&lt;/a&gt;에 이어서, recusion procedure을 이용해 구현해 본다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Implementation 1
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;여기서 제안된 방법은 비어있는 보드(?) 혹은 보드가 없는 상태에서, 보드를 한 단계씩 확장하면서 문제를 해결해 나갈 수 있다는 관점에서 시작한다.
+ (해답의 유형에 따라 이 방법이 유효한다.)&lt;/p&gt;
+
+        &lt;p&gt;각 단계는 queen이 안전하게 위치할 수 있는 한 개의 solution을 확보하는 것이고, 8개 column으로 확장할때 까지 이어진다.&lt;/p&gt;
+
+        &lt;p&gt;이 확장 process는 Dijkstra에 의해 공식화(formulated)되어 있으며, recusion을 이용해 표현할 수 있다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;model/design solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; trycolumn(j) {
+     i = 0
+            
+     while !safe and i==8
+         test_square()
+                
+         if (safe)
+             set_queen()
+             x[j] = i
+                    
+             if (j &amp;lt; 8) trycolumn(j)
+             if (!safe) remove_queen()
+ }
+        
+ main() {
+     trycolumn(1)
+     if safe
+         print(x)
+     else
+         print('fail')
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #include &amp;lt;iostream&amp;gt;
+ using namespace std;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int step, int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int step, int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(int step)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square(int step)
+ {
+     return pointer[step] == 8;
+ }
+        
+ int tryColumn(int step)
+ {
+     int safe = 0;
+            
+     if (step &amp;gt; 8) return true;
+            
+     for (int i = 1; i &amp;lt;=8; ++i) {
+         safe = test_square(step, i);
+                
+         if (safe) {
+             set_queen(step, i);
+             pointer[step] = i;
+                        
+             safe = tryColumn(step + 1);
+                        
+             if (!safe) remove_queen(step);
+             else break;
+         }
+     }
+            
+     return safe;
+ }
+        
+ int main(void)
+ {
+     int safe = 0;
+        
+     safe = tryColumn(1);
+            
+     if (safe) {
+         cout &amp;lt;&amp;lt; endl;
+         for (int i = 1; i &amp;lt; 9; ++i) {
+             cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; &quot;: &quot; &amp;lt;&amp;lt; pointer[i] &amp;lt;&amp;lt; &quot; &quot; &amp;lt;&amp;lt; endl;
+         }
+     }
+     else cout &amp;lt;&amp;lt; &quot;Failed&quot; &amp;lt;&amp;lt; endl;
+            
+     return 0;
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Implementation 2
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;지금까지의 solution은 조건을 만족하는 첫 번째 한개의 답만 찾았다.&lt;/p&gt;
+
+        &lt;p&gt;조건을 만족하는 모든 조합을 찾는 general solution을 도출해 본다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #include &amp;lt;iostream&amp;gt;
+ using namespace std;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int solCount = 0;
+        
+ int test_square(int step, int row)
+ {
+     int square = row;
+        
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+        
+     return !safe;
+ }
+        
+ void set_queen(int step, int row)
+ {
+     int square = row;
+        
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(int step)
+ {
+     int square = pointer[step];
+        
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square(int step)
+ {
+     return pointer[step] == 8;
+ }
+        
+ int tryColumn(int step)
+ {
+     int safe = 0;
+        
+     if (step &amp;gt; 8) {
+         solCount += 1;
+         for (int i = 1; i &amp;lt; 9; ++i) {
+             cout &amp;lt;&amp;lt; pointer[i] &amp;lt;&amp;lt; &quot; &quot;;
+         }
+         cout &amp;lt;&amp;lt; endl;
+        
+         return true;
+     }
+        
+     for (int i = 1; i &amp;lt;=8; ++i) {
+         safe = test_square(step, i);
+        
+         if (safe) {
+             set_queen(step, i);
+             pointer[step] = i;
+        
+             safe = tryColumn(step + 1);
+        
+             remove_queen(step);
+         }
+     }
+        
+     return safe;
+ }
+        
+ int main(void)
+ {
+     int safe = 0;
+        
+     safe = tryColumn(1);
+        
+     cout &amp;lt;&amp;lt; &quot;Sol Count: &quot; &amp;lt;&amp;lt; solCount &amp;lt;&amp;lt; endl;
+     return 0;
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Wed, 03 Jun 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/aps/2020/06/03/stepwiserefine-nqueens-recursion.html</link>
+        <guid isPermaLink="true">http://localhost:4000/aps/2020/06/03/stepwiserefine-nqueens-recursion.html</guid>
+        
+        
+        <category>aps</category>
+        
+      </item>
+    
+      <item>
+        <title>StepwiseRefine(3) - N Queens by loop</title>
+        <description>&lt;p&gt;&lt;em&gt;Niklaus Wirth, Program Development by Stepwise Refinement&lt;/em&gt;의 예제인 8-Queens 문제를 &lt;a href=&quot;/aps/2020/05/25/aps-process.html&quot;&gt;알고리즘 문제해결 process&lt;/a&gt;에서 정리한 방법을 따라 풀어가는 과정을 정리한다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Problem&lt;/p&gt;
+
+    &lt;p&gt;Given are an 8x8 chessboard and 8 queens which are hostile to each other.&lt;/p&gt;
+
+    &lt;p&gt;Find a position for each queen (a configuration) such that no queen may be taken by any other queen.&lt;/p&gt;
+
+    &lt;p&gt;(i.e. such that every row, column and diagonal contains at most one queen)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Problem analysis phase&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis problem&lt;/p&gt;
+
+        &lt;p&gt;condition $p$ : every row, column and diagonal contains at most one queen&lt;/p&gt;
+
+        &lt;p&gt;8x8 chess판에서 condition $p$ 를 만족하는 8개의 위치를 찾는 것이 문제이다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;model/design solution&lt;/p&gt;
+
+        &lt;p&gt;solution $x$ 는 다음과 같이 표현할 수 있다.&lt;/p&gt;
+
+        &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;x = 8 \ locs \in \{A \cap p(x)\}&lt;/script&gt;
+ &lt;script type=&quot;math/tex&quot;&gt;where\ loc = (row, col)&lt;/script&gt;&lt;/p&gt;
+
+        &lt;script type=&quot;math/tex; mode=display&quot;&gt;where\ A=all\ position\ of\ chess, 8 \times 8&lt;/script&gt;
+
+        &lt;p&gt;analytic solution이 존재하지 않는 문제로, trial error방법으로 답을 찾아가야 한다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;p&gt;trial and error 전략으로 문제를 해결하는  pseudo code는 다음과 같다. 문제 공간은 모든 경우의 수가 되고, 이를 검색하고 조건을 확인해 답을 구하게 된다.&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; do
+     x = generate_next_cand(A)
+ while p(x) or (no more elements in A) 
+     
+ if p(x)
+       solution = x; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Architecture decision phase-1&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;초기 구현의 complexity를 분석해보면&lt;/p&gt;
+
+        &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;complexity = _{64}\mathrm{C}_{8} = \frac{64!}{56! \times 8!} \approx 2^{32}&lt;/script&gt;
+ 로 제한 시간 1sec을 만족하지 못 한다.&lt;/p&gt;
+
+        &lt;p&gt;note) 제한시간 1sec은 대략 complexity $10^9$ 정도 이다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;model/design solution&lt;/p&gt;
+
+        &lt;p&gt;초기 구현은 모든 경우의 수를 탐색하는 방법으로 불필요한 경우의 수까지 탐색하고 있다.&lt;/p&gt;
+
+        &lt;p&gt;이 경우, 불필요한 문제영역을 제거함으로써, 그 공간을 줄이는 방법을 적용해 성능을 제고할 수 있다.&lt;/p&gt;
+
+        &lt;p&gt;문제 공간을 줄이는 방법으로 &lt;strong&gt;strategy of preselection&lt;/strong&gt;을 적용해볼 수 있다.&lt;/p&gt;
+
+        &lt;p&gt;$p = q \cap r$ 인 $q$ 와 $r$ 을 다음과 같이 정의할 수 있다.&lt;/p&gt;
+
+        &lt;ul&gt;
+          &lt;li&gt;$r$ : in every column, there must be one queen&lt;/li&gt;
+          &lt;li&gt;&amp;lt;a name=“condition-q”&amp;gt; $q$ : in every row and diagonal, there must be one queen&lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;p&gt;이 때, preselected set은 다음과 같이 정의된다.&lt;/p&gt;
+
+        &lt;script type=&quot;math/tex; mode=display&quot;&gt;B_r = \{x | (x \in A) \wedge r(x)\}&lt;/script&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;&lt;a name=&quot;aph1-program-solution&quot;&gt;program solution&lt;/a&gt;&lt;/p&gt;
+
+        &lt;p&gt;문제 공간만 줄어들 뿐, trial and error와 동일하다.&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;do 
+    x = generate_next_candidate(Br)
+while q(x) || empty(Br)
+
+if q(r)
+    solution = x
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Architecture decision phase 2&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;&lt;a href=&quot;#aph1-program-solution&quot;&gt;두 번째 solution&lt;/a&gt;의 complexity분석은 다음과 같다.&lt;/p&gt;
+
+        &lt;ul&gt;
+          &lt;li&gt;
+            &lt;p&gt;$B_r$ 의 크기(complexity)는 condition $r$ 의 정의에 따라, 8개 각 column별 8개의 row가 가능한 조합이므로&lt;/p&gt;
+
+            &lt;script type=&quot;math/tex; mode=display&quot;&gt;8^8 = (2 ^ 3)^8 = 2^{24}&lt;/script&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;p&gt;이 된다.&lt;/p&gt;
+
+        &lt;p&gt;하지만, 명백히 성립되지 않는 조합에 대해서도 $q(x)$ check를 수행하고 있다. 예를 들어 $x = x[0], x[1], x[2], …, x[7]$ 이라고 했을 때, $x[1]$ 이 $q(x)$ 를 만족하지 못하면, $x[2], …, x[7]$ 는 명백하게 해답이 될 수 없음에도 탐색을 하게 된다.&lt;/p&gt;
+
+        &lt;p&gt;이 점을 문제로 정의할 수 있다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;model/design solution&lt;/p&gt;
+
+        &lt;p&gt;8 queens solution은&lt;/p&gt;
+
+        &lt;ul&gt;
+          &lt;li&gt;${x1, x2, …, x8}$ 의 형식으로 ${x1, …, xj}$ 의 &lt;em&gt;trial solution&lt;/em&gt;을 만들 수 있고&lt;/li&gt;
+          &lt;li&gt;&lt;em&gt;trial solution&lt;/em&gt;이 실패하면, 해당 &lt;em&gt;trial solution&lt;/em&gt;의 extension도 fail하게 된다.&lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;p&gt;즉, back tracking 적용이 가능한 solution type이다. &lt;a href=&quot;/aps/2020/05/26/solution-model.html&quot;&gt;참조&lt;/a&gt;&lt;/p&gt;
+
+        &lt;p&gt;back tracking template code는 다음과 같다.&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; j = 1
+ do 
+     result = try_step(j)
+     if result == successful
+        advance(j + 1)
+     else
+        regress(j - 1)
+ while (j &amp;lt; 1) || (j &amp;gt; n)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;p&gt;back tracking code template을 도입한 첫번째 solution code는 다음과 같다.&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; board
+ pointer
+ safe
+
+ consider_first_column()
+
+ while not last_col_done and not regress_outof_firstcol
+     safe = trycolumn()
+            
+     if safe
+         set_queen()
+         consider_next_column()
+    else
+         regress()
+
+ if last_step_done()
+     print(board)
+ else
+     print(&quot;failed&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Elaboration phase 0&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;backtracking의 핵심인 trystep()과  regress()를 상세화 한다.&lt;/p&gt;
+
+        &lt;p&gt;이 때, stepwise construction이 가능해야 한다는 것을 염두에 두어야 한다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; trystep(step) {
+     while not(safe) and not(last_square)
+         safe = test_square(step, pointer)
+         advance_pointer()
+              
+     return safe
+ }
+      
+ regress(step, pointer) {
+     reconsider_prior_step()
+            
+     if not(regress_outof_firststep)
+         removequeen()
+                        
+     // 하나의 row에 하나의 퀸만 가능하므로, regress한 위치가 마지막 row이면, 
+     // 다시 시도해도 safe가 없을것이 자명하므로 한 step더 뒤로 돌아간다.
+     // 확인해봐야 함.
+            
+     if last_square()
+         reconsider_prior_column()
+         if not(regres_outof_firststep())
+             removequeen()                        
+ }
+      
+ main() {
+     board: let 8x8 array
+     pointer: let array of 1x8
+     safe: variable
+            
+     consider_first_step()
+     while not last_col_done and  not regress_outof_firststep
+         if trystep() == safe
+             set_queen()
+             consider_next_step()
+         else
+             regress()
+                
+     if last_col_done
+         print(x)
+     else
+         print('fail')
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Coding phase 0&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;elaboration의 수준이 code로 포현할 수 밖에 없게될 때 coding phase로 넘어간다.&lt;/p&gt;
+
+        &lt;p&gt;이 단계에서는 다음과 같은 상세화를 진행한다.&lt;/p&gt;
+
+        &lt;p&gt;data structure를 정의할 때 유의할 점은 &lt;a href=&quot;/aps/2020/05/26/solution-model.html&quot;&gt;여기&lt;/a&gt;를 참고한다.&lt;/p&gt;
+
+        &lt;ul&gt;
+          &lt;li&gt;data structure 정의&lt;/li&gt;
+          &lt;li&gt;간단한 변수의 데이터 타입정의 및 관련 method 상세화&lt;/li&gt;
+          &lt;li&gt;step과 pointer 정의&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; board
+ int step (0 &amp;lt;= step &amp;lt;= 9)
+ int pointer[1:8] 
+        
+ consider_first_column() {
+     step = 1
+     pointer[1] = 0
+ }
+        
+ consider_next_step(step) {
+     step = step + 1
+     pointer[step] = 0
+ }
+        
+ advance_pointer(step) {
+     pointer[step] += 1
+ }
+        
+ reconsider_prior_step(step) {
+     step = step - 1
+ }
+        
+ regress_outof_firststep(step) {
+     return step &amp;lt; 1
+ }
+        
+ last_step_done(step) {
+     return step &amp;gt; 8
+ }
+          
+ last_square(step) {
+     return pointer[step] &amp;gt; 8
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Coding phase 1&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;상세화되지 않는 function중 &lt;em&gt;test_square()&lt;/em&gt;는 가장 자주 불리는 함수고, 가장 비싼 함수다. 따라서, 이 함수가 성능을 좌우하게 된다.&lt;/p&gt;
+
+        &lt;p&gt;각 column의 8개의 row를 loop으로 검사할 수도 있지만, 조사할 조건의 특성, 주어진 문제의 특징을 이용해 자료구조를 정의하면 간단한 연산 한번으로 조사를 할 수 있다.&lt;/p&gt;
+
+        &lt;p&gt;다음과 같이 주어진 조건 &lt;a href=&quot;#condition-q&quot;&gt;q(x)&lt;/a&gt;와 좌표 특성을 이용하여      자료구조를 정의한다.&lt;/p&gt;
+
+        &lt;ul&gt;
+          &lt;li&gt;같은 /-diagonal에 위치한 %loc(row, col)%는 %val = row + col%이 같은 값을 가진다.&lt;/li&gt;
+          &lt;li&gt;같은 -diagoal에 위치한 %loc(row, col)%은 %val = row - col%이 같은 값을 가진다.&lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;p&gt;자료구조는 다음과 같이 정의할 수 있다.&lt;/p&gt;
+
+        &lt;ul&gt;
+          &lt;li&gt;a[1:8] = true: no queen is positioned in row&lt;/li&gt;
+          &lt;li&gt;b[2:16] = true: no queen is positioned in the /-diagonal&lt;/li&gt;
+          &lt;li&gt;c[-7:7] = true: no queen is positioned in the -diagonal&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; test_square(step, pointer) {
+     safe = a[pointer] or b[step + pointer] or c[step - pointer]
+     return safe
+ }
+                
+ set_queen(step, pointer) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+    
+ remove_queen(step) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Coding phase 2&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;상세화된 결과를 모두 합친 entire code 도출한다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design Solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; int step (0 &amp;lt;= step &amp;lt;= 9)
+ int pointer[1:8] 
+ a[1:8] = true: no queen is positioned in row
+ b[2:16] = true: no queen is positioned in the /-diagonal
+ c[-7:7] = true: no queen is positioned in the \-diagonal
+        
+ consider_first_column() {
+     step = 1
+     pointer[1] = 0
+ }
+    
+ consider_next_step(step) {
+     step = step + 1
+     pointer[step] = 0
+ }
+    
+ advance_pointer(step) {
+     pointer[step] += 1
+ }
+    
+ reconsider_prior_step(step) {
+     step = step - 1
+ }
+    
+ regress_outof_firststep(step) {
+     return step &amp;lt; 1
+ }
+    
+ last_step_done(step) {
+     return step &amp;gt; 8
+ }
+    
+ last_square(step) {
+     return pointer[step] &amp;gt; 8
+ }
+    
+ test_square(step, pointer) {
+     safe = a[pointer] or b[step + pointer] or c[step - pointer]
+     return safe
+ }
+            
+ set_queen(step, pointer) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+            
+ remove_queen(step) {
+     a[pointer] = b[step + pointer] = c[step - pointer] = false
+ }
+
+ main() {
+     board: let 8x8 array
+     pointer: let array of 1x8
+     safe: variable
+            
+     consider_first_step()
+            
+     while last_col_done or regress_outof_firststep {
+         if trystep() == safe
+             set_queen()
+             consider_next_step()
+         else
+             regress()
+     }
+                
+     if last_col_done
+         print(x)
+     else
+         print('fail')
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Implementation 1&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;analysis&lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #include &amp;lt;iostream&amp;gt;
+ using namespace std;
+        
+ int step = 1;
+ int row = 0;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(void)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square()
+ {
+     return pointer[step] &amp;gt; 8;
+ }
+        
+ void regress(void)
+ {
+     step -= 1;
+            
+     if (step &amp;gt;= 1) {
+         remove_queen();
+                
+         if (last_square()) {
+             step -= 1;
+                    
+             if (step &amp;gt;= 1) remove_queen();
+         }
+     }
+ }
+        
+ int main(void)
+ {
+     /*
+      * try step
+      */
+     while ((step &amp;lt;= 8) &amp;amp;&amp;amp; (step &amp;gt;= 1)) {
+         int safe = 0;
+                
+         while (!safe &amp;amp;&amp;amp; (row != 8)) {
+             row += 1;
+                    
+             safe = test_square(row);
+         }
+                
+         if (safe) {
+             set_queen(row);
+                    
+             pointer[step] = row;
+                    
+             step += 1;
+             row = 0;
+         }
+         else {
+             regress();
+             row = pointer[step];
+         }
+     }
+            
+     if (step &amp;gt; 8) {
+         cout &amp;lt;&amp;lt; endl;
+         for (int i = 1; i &amp;lt; 9; ++i) {
+             cout &amp;lt;&amp;lt; pointer[i] &amp;lt;&amp;lt; &quot; &quot; &amp;lt;&amp;lt; endl;
+         }
+     }
+     else cout &amp;lt;&amp;lt; &quot;Failed&quot; &amp;lt;&amp;lt; endl;
+            
+     return 0;
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Implementation 2&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;global variable인 &lt;em&gt;step&lt;/em&gt;을 parameter전달로 local variable로 만든다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #include &amp;lt;iostream&amp;gt;
+ using namespace std;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int step, int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int step, int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(int step)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square(int step)
+ {
+     return pointer[step] &amp;gt; 8;
+ }
+        
+ int regress(int step)
+ {
+     step -= 1;
+            
+     if (step &amp;gt;= 1) {
+         remove_queen(step);
+                
+         if (last_square(step)) {
+             step -= 1;
+                    
+             if (step &amp;gt;= 1) remove_queen(step);
+         }
+     }
+            
+     return step;
+ }
+        
+ int main(void)
+ {
+     int row = 0;
+     int step = 1;
+            
+     /*
+      * try step
+      */
+     while ((step &amp;lt;= 8) &amp;amp;&amp;amp; (step &amp;gt;= 1)) {
+         int safe = 0;
+                
+         while (!safe &amp;amp;&amp;amp; (row != 8)) {
+             row += 1;
+                    
+             safe = test_square(step, row);
+         }
+                
+         if (safe) {
+             set_queen(step, row);
+                    
+             pointer[step] = row;
+                    
+             step += 1;
+             row = 0;
+         }
+         else {
+             step = regress(step);
+             row = pointer[step];
+         }
+     }
+            
+     if (step &amp;gt; 8) {
+         cout &amp;lt;&amp;lt; endl;
+         for (int i = 1; i &amp;lt; 9; ++i) {
+             cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; &quot;: &quot; &amp;lt;&amp;lt; pointer[i] &amp;lt;&amp;lt; &quot; &quot; &amp;lt;&amp;lt; endl;
+         }
+     }
+     else cout &amp;lt;&amp;lt; &quot;Failed&quot; &amp;lt;&amp;lt; endl;
+            
+     return 0;
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Post mortem&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;analysis&lt;/p&gt;
+
+        &lt;p&gt;지금까지의 solution은 조건을 만족하는 첫 번째 한개의 답만 찾았다.&lt;/p&gt;
+
+        &lt;p&gt;조건을 만족하는 모든 조합을 찾는 general solution을 도출해 본다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;model/design solution&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;program solution&lt;/p&gt;
+
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #include &amp;lt;iostream&amp;gt;
+ using namespace std;
+        
+ int pointer[9] = {0, };
+        
+ int a[9] = {0, };
+ int b[30] = {0, };
+ int c[30] = {0, };
+        
+ int test_square(int step, int row)
+ {
+     int square = row;
+            
+     int safe = a[square] | b[step + square] | c[step - square + 8];
+            
+     return !safe;
+ }
+        
+ void set_queen(int step, int row)
+ {
+     int square = row;
+            
+     a[square] = b[step + square] = c[step - square + 8] = true;
+ }
+        
+ void remove_queen(int step)
+ {
+     int square = pointer[step];
+            
+     a[square] = b[step + square] = c[step - square + 8] = false;
+ }
+        
+ bool last_square(int step)
+ {
+     return pointer[step] &amp;gt; 8;
+ }
+        
+ int regress(int step)
+ {
+     step -= 1;
+            
+     if (step &amp;gt;= 1) {
+         remove_queen(step);
+                
+         if (last_square(step)) {
+             step -= 1;
+                    
+             if (step &amp;gt;= 1) remove_queen(step);
+         }
+     }
+            
+     return step;
+ }
+        
+ int main(void)
+ {
+     int row = 0;
+     int step = 1;
+        
+     int solCount = 0;
+        
+     /*
+      * try step
+      */
+     while (step &amp;gt;= 1) {
+         int safe = 0;
+                
+         while (!safe &amp;amp;&amp;amp; (row != 8)) {
+             row += 1;
+                    
+             safe = test_square(step, row);
+         }
+                
+         if (safe) {
+             set_queen(step, row);
+                    
+             pointer[step] = row;
+                    
+             step += 1;
+             row = 0;
+        
+             if (step &amp;gt; 8) {
+                 solCount += 1;
+        
+                 for (int i = 1; i &amp;lt; 9; ++i) {
+                     cout &amp;lt;&amp;lt; pointer[i] &amp;lt;&amp;lt; &quot; &quot;;
+                 }
+                 cout &amp;lt;&amp;lt; endl;
+        
+                 step = regress(step);
+                 row = pointer[step];
+             }
+         }
+         else {
+             step = regress(step);
+             row = pointer[step];
+         }
+     }
+        
+     cout &amp;lt;&amp;lt; &quot;Total solutions: &quot; &amp;lt;&amp;lt; solCount &amp;lt;&amp;lt; endl;
+     return 0;
+ }
+        
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Wed, 03 Jun 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/aps/2020/06/03/stepwiserefine-nqueens-loop.html</link>
+        <guid isPermaLink="true">http://localhost:4000/aps/2020/06/03/stepwiserefine-nqueens-loop.html</guid>
+        
+        
+        <category>aps</category>
+        
+      </item>
+    
+      <item>
+        <title>StepwiseRefine(2) - 프로그램 모델링 기법</title>
         <description>&lt;p&gt;&lt;em&gt;Niklaus Wirth, Program Development by Stepwise Refinement&lt;/em&gt; 에서 제시한 solution model 기법 몇가지를 정리한다.&lt;/p&gt;
 
 &lt;ol&gt;
@@ -124,7 +1124,7 @@
       </item>
     
       <item>
-        <title>알고리즘 문제해결 Process</title>
+        <title>StepwiseRefine(1) - 알고리즘 문제해결 Process</title>
         <description>&lt;p&gt;&lt;em&gt;Niklaus Wirth, Program Development by Stepwise Refinement&lt;/em&gt; 를 참고해서, 알고리즘 문제 해결에 적용할 문제해결 Process를 정리해 본다.&lt;/p&gt;
 
 &lt;p&gt;문제 해결 과정은 아래와 같이 3개 과정으로 정의할 수 있다.&lt;/p&gt;
@@ -197,6 +1197,8 @@
     &lt;p&gt;Coding phase&lt;/p&gt;
 
     &lt;p&gt;상세화수준이 code로 포현할 수 밖에 없게될 때 coding phase로 넘어간다.&lt;/p&gt;
+
+    &lt;p&gt;이 phase에서는 data structure도 정의하게 되는데, data structure를 정의할 때 유의할 점은 &lt;a href=&quot;/aps/2020/05/26/solution-model.html&quot;&gt;여기&lt;/a&gt;를 참고한다.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
 
@@ -723,54 +1725,6 @@ RUN pip3 install setuptools six numpy wheel jupyter
         
         
         <category>deep-learning</category>
-        
-      </item>
-    
-      <item>
-        <title>using gdb inside docker container</title>
-        <description>&lt;p&gt;Docker container내에서 gdb로 debugging을 할때 설정된 break point에서 break가 걸리지 않는 경우가 있다.
-docker container에서 정상적인 gdb사용을 위해서는 아래 옵션을 추가해서 docker container를 실행해야 한다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run --security-opt seccomp:unconfined
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Sat, 16 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/emacs/2017/09/16/gdb-inside-docker.html</link>
-        <guid isPermaLink="true">http://localhost:4000/emacs/2017/09/16/gdb-inside-docker.html</guid>
-        
-        
-        <category>emacs</category>
-        
-      </item>
-    
-      <item>
-        <title>register Cerificates manually in ubuntu</title>
-        <description>&lt;p&gt;사내에서는 웹사이트 인증서를 따로 설치해야 할 필요가 있다&lt;/p&gt;
-
-&lt;p&gt;인증서 import 기능을 제공하는 브라우저에서는, 해당 메뉴를 사용하면 되고
-그렇지 않은 경우는 시스템에 등록해야 한다.&lt;/p&gt;
-
-&lt;p&gt;ubuntu에서는 아래 command line 명령을 사용해 등록한다.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;copy certificate files to /usr/local/share/ca-certificates&lt;br /&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo cp &amp;lt;path-to-ca-file&amp;gt; /usr/local/share/ca-certificates
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;register&lt;br /&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo update-ca-certificates
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-</description>
-        <pubDate>Sun, 10 Sep 2017 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/dev-common/2017/09/10/ubuntu-ca-install.html</link>
-        <guid isPermaLink="true">http://localhost:4000/dev-common/2017/09/10/ubuntu-ca-install.html</guid>
-        
-        
-        <category>dev-common</category>
         
       </item>
     
