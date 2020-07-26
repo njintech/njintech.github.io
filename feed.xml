@@ -5,9 +5,59 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 09 Jul 2020 21:34:55 +0900</pubDate>
-    <lastBuildDate>Thu, 09 Jul 2020 21:34:55 +0900</lastBuildDate>
+    <pubDate>Sun, 26 Jul 2020 21:30:10 +0900</pubDate>
+    <lastBuildDate>Sun, 26 Jul 2020 21:30:10 +0900</lastBuildDate>
     <generator>Jekyll v3.7.2</generator>
+    
+      <item>
+        <title>tail Recursive의 정의</title>
+        <description>&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;tail-recursive, 꼬리 재귀 호출&lt;/p&gt;
+
+    &lt;p&gt;마지막 리턴 단계에서만 재귀 호출을 하는 함수&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;strict tail-recursive (순 꼬리 재귀 호출)&lt;/p&gt;
+
+    &lt;p&gt;모든 형식 매개변수를 각각에 상응하는 인자로 사용하는 꼬리 재귀 호출을 순 꼬리재귀 호출&lt;/p&gt;
+
+    &lt;p&gt;재귀 호출을 하기 전에 변수의 값을 미리 설정해 주면 순 꼬리 재귀 호출로 고칠 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 10 Jul 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/aps/2020/07/10/tail_recursive.html</link>
+        <guid isPermaLink="true">http://localhost:4000/aps/2020/07/10/tail_recursive.html</guid>
+        
+        
+        <category>aps</category>
+        
+      </item>
+    
+      <item>
+        <title>Optimization target</title>
+        <description>&lt;p&gt;최적화 영역&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;time complexity: number of times of
+    &lt;ul&gt;
+      &lt;li&gt;function call cost&lt;/li&gt;
+      &lt;li&gt;operation cost&lt;/li&gt;
+      &lt;li&gt;dependency on data pattern&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;space complexity&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 10 Jul 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/aps/2020/07/10/optimize_target.html</link>
+        <guid isPermaLink="true">http://localhost:4000/aps/2020/07/10/optimize_target.html</guid>
+        
+        
+        <category>aps</category>
+        
+      </item>
     
       <item>
         <title>multiply algorithm</title>
@@ -1712,116 +1762,6 @@ $$
         
         
         <category>dev</category>
-        
-      </item>
-    
-      <item>
-        <title>how to get bazel work behind proxy</title>
-        <description>&lt;p&gt;proxy를 통해 network에 접속하는 환경에서 bazel을 사용할 때, 인증서 문제로 source build할 수 없는 상황에 맞닥뜨리게 된다. 처음에는 firewall문제로 인식하고 local cache를 사용하는 등의 방법으로 우회를 고민하게 된다. 그런 개발 환경에서의 개발은 절름발이 신세를 빠져나오지 못한다.&lt;br /&gt;
-절름발이 신세를 빠져나온 길의 기록이다.&lt;/p&gt;
-
-&lt;p&gt;proxy뒤에서 bazel build를 시도하면 이런 error message를 만나게 된다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;이 에러는 bazel아니라, JVM의 error message로 target URL의 인증서를 찾을 수 없다는 error다.&lt;br /&gt;
-따라서, Bazel이 실행되는 JVM의 certificate 환경을 자신의 proxy에 맞춰주면 된다.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;install certificate for a site&lt;br /&gt;
-  대부분 proxy 뒤에 위치한 서버라면 기본적으로 Proxy에 대한 인증서가 설치되어 있을 것이다.
-  해당 서버에서 browser를 통해 문제가 되는 파일 혹은 사이트에 접근이 된다면 인증서 설정이 되어있는 상태이고, 이 단계는 건너띄어도 된다.&lt;br /&gt;
-  만약 설치가 되어있지 않은 환경이라면 다음과 같은 과정을 통해 인증서를 설치한다.&lt;/p&gt;
-
-    &lt;ol&gt;
-      &lt;li&gt;
-        &lt;p&gt;Download InstallCert.java code from &lt;a href=&quot;https://jonelove.tistory.com/entry/JAVA-SSL-PKIX-path-building-failed-%EC%98%A4%EB%A5%98%EC%8B%9C&quot;&gt;somewhere&lt;/a&gt;&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;create jar file
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ javac InstallCert.java
-$ manifet.txt:
-$ Main-class: InstallCert
-$ jar -cvmf manifest.txt InstallCert.jar *.class
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-      &lt;li&gt;download cetificates
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ java -jar InstallCert.jar &amp;lt;URL-you-want-to-access&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-      &lt;li&gt;export to file from local keystore
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ keytool -exportcert -keystore jssecacerts -storepass changeit -file output.cert -alias &amp;lt;your-alias-name&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-      &lt;li&gt;import to JAVA keystore
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ keytool -importcert -keystore ${JAVA_HOME}/jre/lib/security/cacerts -storepass changeit -file output.cert -alias &amp;lt;letsencrypt&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;proxy awareness &lt;strong&gt;bazel&lt;/strong&gt;&lt;br /&gt;
-  인증서가 system에 정상 설치되어 있더라도, JVM이 proxy용 인증서를 사용하도록 해야 한다.&lt;br /&gt;
-  (JVM 기본 설정은 proxy가 없는 상태를 전제로 설정된 것으로 보인다.)&lt;br /&gt;
-  JVM에 인증서 위치(trustStore, keyStore)를 override하는 option은 다음과 같다.
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-Djavax.net.ssl.trustStore=&amp;lt;your-path-to-trustStorea&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;&lt;strong&gt;bazel&lt;/strong&gt;은 &lt;em&gt;–host_jvm_args&lt;/em&gt; option을 통해 JVM option을 전달 받는다.&lt;br /&gt;
-  따라서 다음의 command line으로 proxy 뒤에서도 정상적으로 bazel을 사용할 수 있다.&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ bazel --host_jvm_args=‘-Djavax.net.ssl.trustStore=$path-to-truststore’ build &amp;lt;your-build-target&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Annex
-    &lt;ol&gt;
-      &lt;li&gt;more java option&lt;br /&gt;
-  java app인 경우. http.proxyHost option으로는 부족할 때가 있다. (정확히 어떤 경우인지는 FFS이다.)&lt;br /&gt;
-  이 때, 다음 option을 사용해 볼 수 있다.
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-Djava.net.useSystemProxies=true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-      &lt;li&gt;&lt;em&gt;JAVA_HOME&lt;/em&gt; of OSX
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-</description>
-        <pubDate>Sun, 14 Apr 2019 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/tensorflow/2019/04/14/bazel-behind-proxy.html</link>
-        <guid isPermaLink="true">http://localhost:4000/tensorflow/2019/04/14/bazel-behind-proxy.html</guid>
-        
-        
-        <category>tensorflow</category>
-        
-      </item>
-    
-      <item>
-        <title>필사 방법 정리</title>
-        <description>&lt;p&gt;글쓰기 공부를 위한 필사 방법을 정리.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;필사할 글은 본인이 직접 고른다.&lt;/li&gt;
-  &lt;li&gt;먼저 쓱 읽는다.&lt;/li&gt;
-  &lt;li&gt;몇 번 읽어서 전체 글이 무엇을 말하고자 하는지 파악한다.&lt;/li&gt;
-  &lt;li&gt;필사를 하면서 단어, 문장 구조, 문장 접속 구조를 익힌다.
-    &lt;ul&gt;
-      &lt;li&gt;필사할 때는 가능한 문장 단위로 필사한다.&lt;/li&gt;
-      &lt;li&gt;문장이 길면 가능한 가장 긴 의미 단위로 필사한다.&lt;/li&gt;
-      &lt;li&gt;필사할 때는 자신이 문장을 작성한다는 생각으로 쓴다. 작성 후 원문과 비교해서 단어, 문장 구조등을 익힌다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;4번의 과정으로 문장 구조가 눈에 들어오면, 문단 구조, 문단 접속 구조로 넘어간다.&lt;/li&gt;
-  &lt;li&gt;5번의 과정이 익숙해 지면, 글 전체 구조를 파악하는 단계로 넘어간다.&lt;/li&gt;
-&lt;/ol&gt;
-</description>
-        <pubDate>Wed, 14 Feb 2018 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/writing/2018/02/14/my-transciption.html</link>
-        <guid isPermaLink="true">http://localhost:4000/writing/2018/02/14/my-transciption.html</guid>
-        
-        
-        <category>writing</category>
         
       </item>
     
